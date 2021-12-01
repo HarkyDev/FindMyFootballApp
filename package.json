@@ -1,0 +1,24 @@
+{
+  "name": "FindMyFootballApp",
+  "version": "1.0.0",
+  "description": "## https://github.com/HarkyDev/FindMyFootballApp",
+  "main": "scripts.js",
+  "dependencies": {
+    "tailwindcss": "^2.2.19"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build:css": "tailwind build src/tailwind.css -o styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarkyDev/FindMyFootballApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarkyDev/FindMyFootballApp/issues"
+  },
+  "homepage": "https://github.com/HarkyDev/FindMyFootballApp#readme"
+}
