@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find My Football</title>
+    <link rel="stylesheet" href="/dist/styles.css" />
+    <link rel="stylesheet" href="/dist/localStlyes.css" />
+  </head>
+  <body class="bg-gray-900">
+    <header class="head"></header>
+
+    <!-- NAV BAR -->
+    <div class="navContainer bg-purple-700">
+      <form>
+        <input
+          class="userInput pl-8 text-purple-700 font-medium uppercase"
+          id="userInputForm"
+          placeholder="Search for your team now"
+        />
+        <button
+          class="
+            submitBtn
+            bg-white
+            text-purple-700
+            hover:bg-gray-200
+            text-white
+            font-bold
+            py-2
+            px-4
+            rounded-full
+          "
+          id="submitBtn"
+        >
+          search
+        </button>
+      </form>
+    </div>
+
+    <!-- overall container holding the pages colum structure -->
+    <div class="contentContainer flex flex-1">
+      <div class="topRowContainer flex flex-row flex-1">
+        <div
+          class="
+            teamInfoContainer
+            flex
+            bg-gray-800
+            m-4
+            p-16
+            flex-auto
+            rounded-3xl
+          "
+        >
+          <div class="teamCrestContainer flex flex-row">
+            <img
+              id="teamCrest"
+              src="https://via.placeholder.com/200x200"
+              alt=""
+            />
+          </div>
+
+          <div class="teamTextContainer ml-16 text-6xl font-medium">
+            <p class="teamName"></p>
+            <p class="stadiumName"></p>
+            <div class="founded-nation flex align">
+              <p class="founded text-3xl"></p>
+              <p class="nation text-3xl ml-8"></p>
+            </div>
+            <p class="leagueName"></p>
+            <p class="shortName"></p>
+          </div>
+        </div>
+        <div class="mapDisplay bg-purple-700 m-4 p-8 rounded-3xl">
+          <img
+            class="rounded-3xl"
+            src="https://via.placeholder.com/400x300"
+            alt=""
+          />
+        </div>
+      </div>
+      
+      
+    </div>
+    <div class="bottomRowContainer flex flex-row flex-1">
+      <div
+      class="
+        teamInfoContainer
+        flex
+        bg-gray-800
+        m-4
+        p-16
+        flex-auto
+        rounded-3xl
+      ">
+    <div class="lastGamesPlayed">
+        <div class="LastGame1">
+            <div class="divID"></div>
+        </div>
+    </div>
+
+
+
+
+
+      </div>
+    </div>
+
+    <!-- scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/dist/scripts.js"></script>
+  </body>
+</html>
