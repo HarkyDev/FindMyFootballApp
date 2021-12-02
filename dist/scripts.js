@@ -103,9 +103,9 @@ var getAddress = function (teamId) {
     });
 
     // Pass lat & long to map API to render map to page
-    // var platform = new H.service.Platform({
-    //   'apikey': myMapAPI,
-    // });
+    var platform = new H.service.Platform({
+       'apikey': myMapAPI,
+     });
 
     // // Obtain the default map types from the platform object
     // var maptypes = platform.createDefaultLayers();
@@ -132,7 +132,7 @@ var premierLeagueFetch = function (userInput) {
     console.log(response.teams);
 
     //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-    var userInput = "Manchester United";
+    //var userInput = "Manchester United";
     //Coment this in and out to turn off the search function ^^^^^^^^^^^
     var userInputLower = userInput.toLocaleLowerCase();
 
@@ -181,7 +181,7 @@ var matchHistory = function (teamId) {
       "LAST MATCHES.....................LAST MATCHES.............",
       response
     );
-    for (var i = 0; i < 44; i++) {
+    for (var i = 0; i < response.matches.length; i++) {
       if (response.matches[i].status == "FINISHED") {
         // console.log(i)
         ///THIS IS THE LOG THAT SHOWS ALL THE GAMES THAT HAVE BEEN PLAYED THIS SEASON
