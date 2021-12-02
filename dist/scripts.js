@@ -1,6 +1,7 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var teamId = null;
+var playedGames = [] //think we should push to an array and cut off the last 5 and just display that info
 var stadiumName = document.querySelector(".stadiumName");
 var teamName = document.querySelector(".teamName");
 var founded = document.querySelector(".founded");
@@ -52,7 +53,7 @@ var activeTeam = function (teamId) {
   });
 };
 
-// VB 01/12/2021
+// VB 1&2/12/2021
 // MAP API fetch - looking at HERE API & Google Geocoding to get co-ordinates for map
 // HERE API key
 var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc"
@@ -65,21 +66,21 @@ var getAddress = function (teamId) {
     dataType: "json",
     type: "GET",
   }).done(function (response) {
-    // do something with the response, e.g. isolate the id of a linked resource
     console.log("STADIUM ADDRESS:", response.address);
 
-    
+    // Change string to be added to Map API call
     var teamAddress = response.address;
     teamAddress.toString();
     var webTeamAddress = teamAddress.replaceAll(" ", "+");
     console.log(webTeamAddress);
 
-    fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc`)
-  .then(mapData => {
-    var getMap = mapData
-    mapImg.setAttribute("src", getMap);
-  })
-
+    // HERE API call for stadium on map
+  //   fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc`)
+  // .then( function (response) 
+  //   console.log("Address -----------------------",response)
+  
+  // );
+  
   });
 
 };
@@ -149,29 +150,41 @@ $.ajax({
     // do something with the response, e.g. isolate the id of a linked resource
     console.log("LAST MATCHES.....................LAST MATCHES............." , response);
     for (var i = 0 ; i < 44 ; i++){
-      var playedGames = [] //think we should push to an array and cut off the last 5 and just display that info
       if (response.matches[i].status == "FINISHED") {
         // console.log(i)
         ///THIS IS THE LOG THAT SHOWS ALL THE GAMES THAT HAVE BEEN PLAYED THIS SEASON
         // JUST NEED TO GET THEM RENDERED ON TO THE INDEX
-         console.log(
-          response.matches[i].homeTeam.name + " " +
-          response.matches[i].score.fullTime.homeTeam +
-          " : " +
-          response.matches[i].score.fullTime.awayTeam + " " +
-          response.matches[i].awayTeam.name + 
-          " Competition: " + response.matches[i].competition.name );
-         
+        var homeTeamName = response.matches[i].homeTeam.name;
+        var homeScore = response.matches[i].score.fullTime.homeTeam;
+        var awayScore = response.matches[i].score.fullTime.awayTeam;
+        var awayTeamName = response.matches[i].awayTeam.name;
+        var comp = response.matches[i].competition.name;
+        playedGames.push(homeTeamName + " " + homeScore + ":" +  awayScore + " " + awayTeamName + " " + comp);
+        // console.log(homeTeamName);
         
-        }
-      else {
-        console.log("GAMES NOT PLAYED YET")
       }
+
+    else {
+      console.log("GAMES NOT PLAYED YET")
     }
-    
-    });
   }
- 
+  console.log("Played Games ------------------", playedGames);  
+  
+  for (var i = playedGames.length ; i >= playedGames.length -5; i--) {
+    console.log(playedGames[i])
+  }
+  // Create append for played games array
+});
+
+
+
+
+
+
+// console.log("Played Games ------------------", reversePlayed); 
+
+
+};
 
 
 //Eh-
