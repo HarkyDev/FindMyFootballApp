@@ -1,7 +1,7 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var teamId = null;
-var playedGames = [] //think we should push to an array and cut off the last 5 and just display that info
+var playedGames = []; //think we should push to an array and cut off the last 5 and just display that info
 var stadiumName = document.querySelector(".stadiumName");
 var teamName = document.querySelector(".teamName");
 var founded = document.querySelector(".founded");
@@ -43,20 +43,21 @@ var activeTeam = function (teamId) {
     stadiumName.textContent = "STADIUM:                  " + response.venue;
     teamName.textContent = "TEAM:                  " + response.name;
     founded.textContent = "FOUNDED:                  " + response.founded;
-    nation.textContent = "NATION:                  " + response.area.name
-    leagueName.textContent = "LEAGUE:                  " + response.activeCompetitions[0].name;
-    shortName.textContent = "ALSO KNOWN AS:                  " + response.shortName;
+    nation.textContent = "NATION:                  " + response.area.name;
+    leagueName.textContent =
+      "LEAGUE:                  " + response.activeCompetitions[0].name;
+    shortName.textContent =
+      "ALSO KNOWN AS:                  " + response.shortName;
 
-
-    teamCrest.setAttribute("src", response.crestUrl )
-   //crest url works but the apis selection is poor, night worth selecting white background to lessen the contrast
+    teamCrest.setAttribute("src", response.crestUrl);
+    //crest url works but the apis selection is poor, night worth selecting white background to lessen the contrast
   });
 };
 
 // VB 1&2/12/2021
-// MAP API fetch - looking at HERE API & Google Geocoding to get co-ordinates for map
+// MAP API fetch - looking at HERE API Geocoding to get co-ordinates for map
 // HERE API key
-var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc"
+var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc";
 
 // Team address data fetch request
 var getAddress = function (teamId) {
@@ -72,17 +73,52 @@ var getAddress = function (teamId) {
     var teamAddress = response.address;
     teamAddress.toString();
     var webTeamAddress = teamAddress.replaceAll(" ", "+");
+
+    //var webTeamAddress = "Fulham+Road+London+SW6+1HS";
     console.log(webTeamAddress);
+    // var corsAnywhere = "https://course-anywhere.herokuapp.com/"
+    // // HERE API call for stadium on map
+    //   fetch(`https://geocode.search.hereapi.com/v1/geocode?q=Invalidenstr+117+Berlin
+    //   &apiKey=${myMapAPI}`)
+    // .then( function (response) {
+    //   console.log("Address -----------------------", response);
 
-    // HERE API call for stadium on map
-  //   fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc`)
-  // .then( function (response) 
-  //   console.log("Address -----------------------",response)
-  
-  // );
-  
+    $.ajax({
+      url: `https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=${myMapAPI}`,
+      dataType: "json",
+      type: "GET",
+    }).done(function (response) {
+      console.log("MAP LOCATION_____________________:", response);
+      console.log(
+        "MAP LATITUDE_____________________:",
+        response.items[0].position.lat
+      );
+      console.log(
+        "MAP LONGITUDE_____________________:",
+        response.items[0].position.lng
+      );
+
+      var teamLat = response.items[0].position.lat;
+      var teamLong = response.items[0].position.lng;
+    });
+
+    // Pass lat & long to map API to render map to page
+    var platform = new H.service.Platform({
+       'apikey': myMapAPI,
+     });
+
+    // // Obtain the default map types from the platform object
+    // var maptypes = platform.createDefaultLayers();
+
+    // // Instantiate (and display) a map object:
+    // var map = new H.Map(
+    //   document.querySelector('.mapImg'),
+    //   maptypes.vector.normal.map,
+    //   {
+    //     zoom: 10,
+    //     center: { lng: 13.4, lat: 52.51 }
+    //   });
   });
-
 };
 
 var premierLeagueFetch = function (userInput) {
@@ -94,9 +130,9 @@ var premierLeagueFetch = function (userInput) {
   }).done(function (response) {
     // do something with the response, e.g. isolate the id of a linked resource
     console.log(response.teams);
-    
+
     //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-    var userInput = "Chelsea"
+    //var userInput = "Manchester United";
     //Coment this in and out to turn off the search function ^^^^^^^^^^^
     var userInputLower = userInput.toLocaleLowerCase();
 
@@ -108,23 +144,21 @@ var premierLeagueFetch = function (userInput) {
           "  teamID:  " +
           response.teams[i].id
       );
-      console.log(response.teams[i].venue)
+      console.log(response.teams[i].venue);
       if (teamName.includes(userInputLower)) {
         console.log("---------------------------id was the same");
         var teamId = response.teams[i].id;
         console.log(teamId + " " + teamName);
       } else console.log("id was not the same");
     }
-    matchHistory(teamId)
+    matchHistory(teamId);
     activeTeam(teamId);
     getAddress(teamId);
   });
 };
 
-
-
 //manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
-premierLeagueFetch()
+premierLeagueFetch();
 
 // premierLeagueFetch()
 ///TODO:
@@ -134,22 +168,20 @@ premierLeagueFetch()
 //-- go over wire frame
 //----
 
-
-
-
-
-
 // match history fetch
 var matchHistory = function (teamId) {
-$.ajax({
-    headers: { 'X-Auth-Token': '148ea564e1a248f5a8bb2001c2cb5650' },
-      url: `http://api.football-data.org/v2/teams/${teamId}/matches/`,
-      dataType: 'json',
-      type: 'GET',
-    }).done(function(response) {
+  $.ajax({
+    headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
+    url: `http://api.football-data.org/v2/teams/${teamId}/matches/`,
+    dataType: "json",
+    type: "GET",
+  }).done(function (response) {
     // do something with the response, e.g. isolate the id of a linked resource
-    console.log("LAST MATCHES.....................LAST MATCHES............." , response);
-    for (var i = 0 ; i < 44 ; i++){
+    console.log(
+      "LAST MATCHES.....................LAST MATCHES.............",
+      response
+    );
+    for (var i = 0; i < response.matches.length; i++) {
       if (response.matches[i].status == "FINISHED") {
         // console.log(i)
         ///THIS IS THE LOG THAT SHOWS ALL THE GAMES THAT HAVE BEEN PLAYED THIS SEASON
@@ -159,32 +191,31 @@ $.ajax({
         var awayScore = response.matches[i].score.fullTime.awayTeam;
         var awayTeamName = response.matches[i].awayTeam.name;
         var comp = response.matches[i].competition.name;
-        playedGames.push(homeTeamName + " " + homeScore + ":" +  awayScore + " " + awayTeamName + " " + comp);
+        playedGames.push(
+          homeTeamName +
+            " " +
+            homeScore +
+            ":" +
+            awayScore +
+            " " +
+            awayTeamName +
+            " " +
+            comp
+        );
         // console.log(homeTeamName);
-        
+      } else {
+        console.log("GAMES NOT PLAYED YET");
       }
-
-    else {
-      console.log("GAMES NOT PLAYED YET")
     }
-  }
-  console.log("Played Games ------------------", playedGames);  
-  
-  for (var i = playedGames.length ; i >= playedGames.length -5; i--) {
-    console.log(playedGames[i])
-  }
-  // Create append for played games array
-});
+    console.log("Played Games ------------------", playedGames);
 
+    for (var i = playedGames.length; i >= playedGames.length - 5; i--) {
+      console.log(playedGames[i]);
+    }
+    // Create append for played games array
+  });
 
-
-
-
-
-// console.log("Played Games ------------------", reversePlayed); 
-
-
+  // console.log("Played Games ------------------", reversePlayed);
 };
-
 
 //Eh-
