@@ -1,4 +1,4 @@
-//VARS-CONTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var teamId = null;
 var stadiumName = document.querySelector(".stadiumName");
@@ -8,11 +8,11 @@ var nation = document.querySelector(".nation");
 var leagueName = document.querySelector(".leagueName");
 var shortName = document.querySelector(".shortName");
 var teamCrest = document.getElementById("teamCrest");
-
+var mapImg = document.querySelector(".mapImg");
 
 var submitBtn = document.getElementById("submitBtn");
 var userInputForm = document.getElementById("userInputForm");
-//VARS-CONTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +52,38 @@ var activeTeam = function (teamId) {
   });
 };
 
+// VB 01/12/2021
+// MAP API fetch - looking at HERE API & Google Geocoding to get co-ordinates for map
+// HERE API key
+var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc"
+
+// Team address data fetch request
+var getAddress = function (teamId) {
+  $.ajax({
+    headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
+    url: `http://api.football-data.org/v2/teams/${teamId}`,
+    dataType: "json",
+    type: "GET",
+  }).done(function (response) {
+    // do something with the response, e.g. isolate the id of a linked resource
+    console.log("STADIUM ADDRESS:", response.address);
+
+    
+    var teamAddress = response.address;
+    teamAddress.toString();
+    var webTeamAddress = teamAddress.replaceAll(" ", "+");
+    console.log(webTeamAddress);
+
+    fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc`)
+  .then(mapData => {
+    var getMap = mapData
+    mapImg.setAttribute("src", getMap);
+  })
+
+  });
+
+};
+
 var premierLeagueFetch = function (userInput) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
@@ -63,7 +95,7 @@ var premierLeagueFetch = function (userInput) {
     console.log(response.teams);
     
     //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-    // var userInput = "chelsea"
+    var userInput = "Chelsea"
     //Coment this in and out to turn off the search function ^^^^^^^^^^^
     var userInputLower = userInput.toLocaleLowerCase();
 
@@ -84,6 +116,7 @@ var premierLeagueFetch = function (userInput) {
     }
     matchHistory(teamId)
     activeTeam(teamId);
+    getAddress(teamId);
   });
 };
 
@@ -99,6 +132,11 @@ premierLeagueFetch()
 //-- Setup User input
 //-- go over wire frame
 //----
+
+
+
+
+
 
 // match history fetch
 var matchHistory = function (teamId) {
