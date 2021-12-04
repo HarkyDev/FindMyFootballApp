@@ -100,25 +100,29 @@ var getAddress = function (teamId) {
 
       var teamLat = response.items[0].position.lat;
       var teamLong = response.items[0].position.lng;
+
+
+
+      var platform = new H.service.Platform({
+        'apikey': myMapAPI
+      });
+     // Obtain the default map types from the platform object:
+      var defaultLayers = platform.createDefaultLayers();
+
+// Instantiate (and display) a map object:
+    var map = new H.Map(
+    document.getElementById('mapContainer'),
+    defaultLayers.vector.normal.map,
+    {
+      zoom: 10,
+      center: { lat: teamLat, lng: teamLong }
+    });
+    
     });
 
-    // Pass lat & long to map API to render map to page
-    var platform = new H.service.Platform({
-       'apikey': myMapAPI,
-     });
+    
 
-    // // Obtain the default map types from the platform object
-    // var maptypes = platform.createDefaultLayers();
-
-    // // Instantiate (and display) a map object:
-    // var map = new H.Map(
-    //   document.querySelector('.mapImg'),
-    //   maptypes.vector.normal.map,
-    //   {
-    //     zoom: 10,
-    //     center: { lng: 13.4, lat: 52.51 }
-    //   });
-  });
+    });
 };
 
 var premierLeagueFetch = function (userInput) {

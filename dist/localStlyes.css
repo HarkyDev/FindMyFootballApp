@@ -25,6 +25,11 @@ input:focus {
     left: -120px;
 }
 
+.mapDisplay {
+    height: 444px;
+    width: 380px;
+}
+
 .teamTextContainer  p {
     margin-top: 8px
 }
