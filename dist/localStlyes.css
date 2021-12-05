@@ -25,6 +25,22 @@ input:focus {
     left: -120px;
 }
 
+.mapDisplay {
+    height: 444px;
+    width: 380px;
+}
+
+ul li {
+    font-size: 40px;
+    color: black;
+    padding: 15px;
+    margin: 20px;
+    background-color: orange;
+    border-radius: 32px;
+    text-align: center;
+    position: relative;
+}
+
 .teamTextContainer  p {
     margin-top: 8px
 }

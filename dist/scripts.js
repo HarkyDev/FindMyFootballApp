@@ -2,6 +2,7 @@
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var teamId = null;
 var playedGames = []; //think we should push to an array and cut off the last 5 and just display that info
+var displayLastFive = [];
 var stadiumName = document.querySelector(".stadiumName");
 var teamName = document.querySelector(".teamName");
 var founded = document.querySelector(".founded");
@@ -10,7 +11,7 @@ var leagueName = document.querySelector(".leagueName");
 var shortName = document.querySelector(".shortName");
 var teamCrest = document.getElementById("teamCrest");
 var mapImg = document.querySelector(".mapImg");
-
+var gamesDisplay = document.querySelector(".LastGame1")
 var submitBtn = document.getElementById("submitBtn");
 var userInputForm = document.getElementById("userInputForm");
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,12 +78,8 @@ var getAddress = function (teamId) {
     //var webTeamAddress = "Fulham+Road+London+SW6+1HS";
     console.log(webTeamAddress);
     // var corsAnywhere = "https://course-anywhere.herokuapp.com/"
-    // // HERE API call for stadium on map
-    //   fetch(`https://geocode.search.hereapi.com/v1/geocode?q=Invalidenstr+117+Berlin
-    //   &apiKey=${myMapAPI}`)
-    // .then( function (response) {
-    //   console.log("Address -----------------------", response);
-
+    
+    // API call using stadium address for map coordinates
     $.ajax({
       url: `https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=${myMapAPI}`,
       dataType: "json",
@@ -97,27 +94,47 @@ var getAddress = function (teamId) {
         "MAP LONGITUDE_____________________:",
         response.items[0].position.lng
       );
-
+      // Declare coordinate variables to display map
       var teamLat = response.items[0].position.lat;
       var teamLong = response.items[0].position.lng;
+
+      // Display map on page
+      var platform = new H.service.Platform({
+        apikey: myMapAPI,
+      });
+      // Obtain the default map types from the platform object:
+      var defaultLayers = platform.createDefaultLayers();
+
+      // Instantiate (and display) a map object:
+      var map = new H.Map(
+        document.getElementById("mapContainer"),
+        defaultLayers.vector.normal.map,
+        {
+          zoom: 13,
+          center: { lat: teamLat, lng: teamLong },
+        }
+      );
+
+      // VB 03/12/21 Tried to add custom marker to map but couldn't get the filepath to work. Saved a custom football pin to a new Img folder.
+      // HERE documentation on map icons: https://developer.here.com/documentation/maps/3.1.30.3/dev_guide/topics/marker-objects.html
+
+      // SVG markup that define icon image
+      var svgMarkup =
+        '<svg width="24" height="24" ' +
+        'xmlns="http://www.w3.org/2000/svg">' +
+        '<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
+        'height="22" /><text x="12" y="18" font-size="12pt" ' +
+        'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
+        'fill="white">!</text></svg>';
+
+      // Creating icon, object for coordinates and marker
+      var icon = new H.map.Icon(svgMarkup);
+      var coords = { lat: teamLat, lng: teamLong };
+      var marker = new H.map.Marker(coords, { icon: icon });
+
+      //add marker to map
+      map.addObject(marker);
     });
-
-    // Pass lat & long to map API to render map to page
-    var platform = new H.service.Platform({
-       'apikey': myMapAPI,
-     });
-
-    // // Obtain the default map types from the platform object
-    // var maptypes = platform.createDefaultLayers();
-
-    // // Instantiate (and display) a map object:
-    // var map = new H.Map(
-    //   document.querySelector('.mapImg'),
-    //   maptypes.vector.normal.map,
-    //   {
-    //     zoom: 10,
-    //     center: { lng: 13.4, lat: 52.51 }
-    //   });
   });
 };
 
@@ -211,8 +228,22 @@ var matchHistory = function (teamId) {
 
     for (var i = playedGames.length; i >= playedGames.length - 5; i--) {
       console.log(playedGames[i]);
+      displayLastFive.push(playedGames[i]);
     }
-    // Create append for played games array
+
+    var gamesList = document.createElement('ul')
+    // Create appends for Last 5 played games array
+    for (var i = 1; i < displayLastFive.length; i++) {
+      var listItem = document.createElement("li");
+      listItem.innerHTML = displayLastFive[i];
+      gamesList.appendChild(listItem);
+    };
+  
+  gamesDisplay.append(gamesList);
+     
+      
+
+    
   });
 
   // console.log("Played Games ------------------", reversePlayed);
