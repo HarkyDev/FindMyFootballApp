@@ -196,7 +196,7 @@ var matchHistory = function (teamId) {
       }
     }
     console.log("Played Games ------------------", playedGames);
-
+    displayLastFive = [];
     for (var i = playedGames.length; i >= playedGames.length - 5; i--) {
       console.log(playedGames[i]);
       displayLastFive.push(playedGames[i]);
@@ -213,10 +213,12 @@ var matchHistory = function (teamId) {
 var pastGamesList = document.getElementById("pastGamesList");
 var listChild = pastGamesList.getElementsByTagName("li")[0];
 var renderLastFive = function () {
-  // need to reset the innerHtml of the ul but cant figure it out yet
+   $( "#pastGamesList" ).empty();
+  // need to reset the innerHtml of the ul but cant figure it out yet - DONE!
   // Create appends for Last 5 played games array
   for (var i = 1; i < displayLastFive.length; i++) {
     var listItem = document.createElement("li");
+
     listItem.innerHTML = displayLastFive[i];
     pastGamesList.appendChild(listItem);
   }
