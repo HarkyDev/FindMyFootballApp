@@ -17,15 +17,16 @@ var submitBtn = document.getElementById("submitBtn");
 var userInputForm = document.getElementById("userInputForm");
 var mapDisplay = document.querySelector(".mapDisplay");
 var squadListDisplay = document.getElementById("squadListDisplay");
+var userInput = ""
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var getUserInput = function (e) {
   e.preventDefault();
-  var userInput = userInputForm.value;
+  userInput = userInputForm.value;
   console.log("userInput:  " + userInput);
-  premierLeagueFetch(userInput);
+  leagueFetch(userInput);
 };
 
 submitBtn.addEventListener("click", getUserInput);
@@ -108,48 +109,51 @@ var getAddress = function (teamId) {
     });
   });
 };
-
-var premierLeagueFetch = function (userInput) {
-  $.ajax({
-    headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `https://api.football-data.org/v2/competitions/PL/teams`,
-    dataType: "json",
-    type: "GET",
-  }).done(function (response) {
-    // do something with the response, e.g. isolate the id of a linked resource
-    console.log(response.teams);
-
-    //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-    //var userInput = "Manchester United";
-    //Coment this in and out to turn off the search function ^^^^^^^^^^^
-    var userInputLower = userInput.toLocaleLowerCase();
-
-    for (var i = 0; i < 20; i++) {
-      var teamName = response.teams[i].name.toLocaleLowerCase();
-      console.log(
-        "Name:  " +
+var leagueArray = ["BL1","PL","SA","PD","FL1","DED","PPL"]
+var leagueFetch = function (userInput) {
+  for (var n=0; n< leagueArray.length; n++){
+    
+    $.ajax({
+      headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
+      url: `https://api.football-data.org/v2/competitions/${leagueArray[n]}/teams`,
+      dataType: "json",
+      type: "GET",
+    }).done(function (response) {
+      // do something with the response, e.g. isolate the id of a linked resource
+      console.log(response.teams);
+      
+      //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
+      //var userInput = "Manchester United";
+      //Coment this in and out to turn off the search function ^^^^^^^^^^^
+      var userInputLower = userInput.toLocaleLowerCase();
+      
+      for (var i = 0; i < response.teams.length; i++) {
+        var teamName = response.teams[i].name.toLocaleLowerCase();
+        console.log(
+          "Name:  " +
           response.teams[i].name.toLocaleLowerCase() +
           "  teamID:  " +
           response.teams[i].id
-      );
-      console.log(response.teams[i].venue);
-      if (teamName.includes(userInputLower)) {
-        console.log("---------------------------id was the same");
-        var teamId = response.teams[i].id;
-        console.log(teamId + " " + teamName);
-      } else console.log("id was not the same");
+          );
+          console.log(response.teams[i].venue);
+          if (teamName.includes(userInputLower)) {
+            console.log("---------------------------id was the same");
+            var teamId = response.teams[i].id;
+            console.log(teamId + " " + teamName);
+          } else console.log("id was not the same");
+        }
+        matchHistory(teamId);
+        activeTeam(teamId);
+        getAddress(teamId);
+        getPlayers(teamId);
+      });
     }
-    matchHistory(teamId);
-    activeTeam(teamId);
-    getAddress(teamId);
-    getPlayers(teamId);
-  });
 };
 
 //manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
-premierLeagueFetch();
+leagueFetch();
 
-// premierLeagueFetch()
+// leagueFetch()
 ///TODO:
 //-- Finish this search function DONE
 //-- go over Git Branches
