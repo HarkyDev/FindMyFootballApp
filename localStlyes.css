@@ -30,7 +30,7 @@ input:focus {
     width: 380px;
 }
 
-ul li {
+/* ul li {
     font-size: 40px;
     color: black;
     padding: 15px;
@@ -39,6 +39,10 @@ ul li {
     border-radius: 32px;
     text-align: center;
     position: relative;
+} */
+
+#squadListDisplay{
+    max-height: 200px;
 }
 
 .teamTextContainer  p {
