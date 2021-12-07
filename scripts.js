@@ -15,7 +15,8 @@ var mapImg = document.querySelector(".mapImg");
 var gamesDisplay = document.querySelector(".LastGame1");
 var submitBtn = document.getElementById("submitBtn");
 var userInputForm = document.getElementById("userInputForm");
-var mapDisplay = document.querySelector(".mapDisplay")
+var mapDisplay = document.querySelector(".mapDisplay");
+var squadListDisplay = document.getElementById("squadListDisplay");
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,7 @@ submitBtn.addEventListener("click", getUserInput);
 var activeTeam = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `http://api.football-data.org/v2/teams/${teamId}`,
+    url: `https://api.football-data.org/v2/teams/${teamId}`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
@@ -66,7 +67,7 @@ var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc";
 var getAddress = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `http://api.football-data.org/v2/teams/${teamId}`,
+    url: `https://api.football-data.org/v2/teams/${teamId}`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
@@ -111,7 +112,7 @@ var getAddress = function (teamId) {
 var premierLeagueFetch = function (userInput) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `http://api.football-data.org/v2/competitions/PL/teams`,
+    url: `https://api.football-data.org/v2/competitions/PL/teams`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
@@ -160,7 +161,7 @@ premierLeagueFetch();
 var matchHistory = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `http://api.football-data.org/v2/teams/${teamId}/matches/`,
+    url: `https://api.football-data.org/v2/teams/${teamId}/matches/`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
@@ -213,7 +214,7 @@ var matchHistory = function (teamId) {
 var pastGamesList = document.getElementById("pastGamesList");
 var listChild = pastGamesList.getElementsByTagName("li")[0];
 var renderLastFive = function () {
-   $( "#pastGamesList" ).empty();
+  $("#pastGamesList").empty();
   // need to reset the innerHtml of the ul but cant figure it out yet - DONE!
   // Create appends for Last 5 played games array
   for (var i = 1; i < displayLastFive.length; i++) {
@@ -225,18 +226,24 @@ var renderLastFive = function () {
 };
 //Eh-
 
+var renderPlayers = function (squadList) {
+  $("#squadListDisplay").empty();
+  for (var i = 0; i < squadList.length; i++) {
+    console.log(squadList[i]);
+    var listItem = document.createElement("li");
+    listItem.innerHTML = squadList[i];
+    squadListDisplay.appendChild(listItem);
+    
+  }
+};
 
-
-function removeElementsByTag(tagName){
-  mapDisplay.innerHTML = ""
+function removeElementsByTag(tagName) {
+  mapDisplay.innerHTML = "";
   const elements = document.getElementsByTagName(tagName);
-  while(elements.length > 0){
-      elements[0].parentNode.removeChild(elements[0]);
+  while (elements.length > 0) {
+    elements[0].parentNode.removeChild(elements[0]);
   }
 }
-
-
-
 
 var testFunc = function () {
   console.log(
@@ -248,7 +255,7 @@ var testFunc = function () {
 var getPlayers = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-    url: `http://api.football-data.org/v2/teams/${teamId}`,
+    url: `https://api.football-data.org/v2/teams/${teamId}`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
@@ -264,19 +271,16 @@ var getPlayers = function (teamId) {
       );
     }
     console.log(squadList);
+    renderPlayers(squadList);
   });
 };
 
-
-var canvasTag = document.getElementsByTagName("canvas")
+var canvasTag = document.getElementsByTagName("canvas");
 //map render
 
-
-
-
 var mapRender = function (teamLat, teamLong) {
-//first thing here is to remove the canvas 
-  removeElementsByTag("canvas")
+  //first thing here is to remove the canvas
+  removeElementsByTag("canvas");
 
   var platform = new H.service.Platform({
     apikey: myMapAPI,
@@ -300,7 +304,7 @@ var mapRender = function (teamLat, teamLong) {
   // SVG markup that define icon image
   var svgMarkup =
     '<svg width="24" height="24" ' +
-    'xmlns="http://www.w3.org/2000/svg">' +
+    'xmlns="https://www.w3.org/2000/svg">' +
     '<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
     'height="22" /><text x="12" y="18" font-size="12pt" ' +
     'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
