@@ -258,26 +258,45 @@ var mapRender = function (teamLat, teamLong) {
       center: { lat: teamLat, lng: teamLong },
     }
   );
+// Create a map object:
 
-  // VB 03/12/21 Tried to add custom marker to map but couldn't get the filepath to work. Saved a custom football pin to a new Img folder.
-  // HERE documentation on map icons: https://developer.here.com/documentation/maps/3.1.30.3/dev_guide/topics/marker-objects.html
 
-  // SVG markup that define icon image
-  var svgMarkup =
-    '<svg width="24" height="24" ' +
-    'xmlns="https://www.w3.org/2000/svg">' +
-    '<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
-    'height="22" /><text x="12" y="18" font-size="12pt" ' +
-    'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
-    'fill="white">!</text></svg>';
+// Define a variable holding SVG mark-up that defines an animated icon image:
+var animatedSvg =
+    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" ' + 
+    'y="0px" style="margin:-112px 0 0 -32px" width="136px"' + 
+    'height="150px" viewBox="0 0 136 150"><ellipse fill="#000" ' +
+    'cx="32" cy="128" rx="36" ry="4"><animate attributeName="cx" ' + 
+    'from="32" to="32" begin="0s" dur="1.5s" values="96;32;96" ' + 
+    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes="0;0.4;1"' + 
+    'calcMode="spline" repeatCount="indefinite"/>' +    
+    '<animate attributeName="rx" from="36" to="36" begin="0s"' +
+    'dur="1.5s" values="36;10;36" keySplines=".6 .0 .8 .0; .0 .8 .0 1"' + 
+    'keyTimes="0;0.4;1" calcMode="spline" repeatCount="indefinite"/>' +
+    '<animate attributeName="opacity" from=".2" to=".2"  begin="0s" ' +
+    ' dur="1.5s" values=".1;.7;.1" keySplines=" .6.0 .8 .0; .0 .8 .0 1" ' +
+    'keyTimes=" 0;0.4;1" calcMode="spline" ' +
+    'repeatCount="indefinite"/></ellipse><ellipse fill="#F19D00" ' +
+    'cx="26" cy="20" rx="16" ry="12"><animate attributeName="cy" ' +
+    'from="20" to="20" begin="0s" dur="1.5s" values="20;112;20" ' +
+    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes=" 0;0.4;1" ' +
+    'calcMode="spline" repeatCount="2"/> ' +
+    '<animate attributeName="ry" from="16" to="16" begin="0s" ' + 
+    'dur="1.5s" values="16;12;16" keySplines=".6 .0 .8 .0; .0 .8 .0 1" ' +
+    'keyTimes="0;0.4;1" calcMode="spline" ' +
+    'repeatCount="indefinite"/></ellipse></svg>';
 
-  // Creating icon, object for coordinates and marker
-  var icon = new H.map.Icon(svgMarkup);
-  var coords = { lat: teamLat, lng: teamLong };
-  var marker = new H.map.Marker(coords, { icon: icon });
+// Create an icon object, an object with geographic coordinates and a marker:
+var icon = new H.map.DomIcon(animatedSvg),
+    coords = {lat: teamLat, lng: teamLong},
+    marker = new H.map.DomMarker(coords, {icon: icon});
 
-  //add marker to map
-  map.addObject(marker);
+// Set map center and zoom, add the marker to the map:
+map.setCenter(coords);
+map.setZoom(14);
+map.addObject(marker);
+
+  // var coords = { lat: teamLat, lng: teamLong };
 };
 
 var myLocalStorage = {
