@@ -258,20 +258,19 @@ var mapRender = function (teamLat, teamLong) {
       center: { lat: teamLat, lng: teamLong },
     }
   );
-// Create a map object:
+  // Create a map object:
 
-
-// Define a variable holding SVG mark-up that defines an animated icon image:
-var animatedSvg =
-    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" ' + 
-    'y="0px" style="margin:-112px 0 0 -32px" width="136px"' + 
+  // Define a variable holding SVG mark-up that defines an animated icon image:
+  var animatedSvg =
+    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" ' +
+    'y="0px" style="margin:-112px 0 0 -32px" width="136px"' +
     'height="150px" viewBox="0 0 136 150"><ellipse fill="#000" ' +
-    'cx="32" cy="128" rx="36" ry="4"><animate attributeName="cx" ' + 
-    'from="32" to="32" begin="0s" dur="1.5s" values="96;32;96" ' + 
-    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes="0;0.4;1"' + 
-    'calcMode="spline" repeatCount="indefinite"/>' +    
+    'cx="32" cy="128" rx="36" ry="4"><animate attributeName="cx" ' +
+    'from="32" to="32" begin="0s" dur="1.5s" values="96;32;96" ' +
+    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes="0;0.4;1"' +
+    'calcMode="spline" repeatCount="indefinite"/>' +
     '<animate attributeName="rx" from="36" to="36" begin="0s"' +
-    'dur="1.5s" values="36;10;36" keySplines=".6 .0 .8 .0; .0 .8 .0 1"' + 
+    'dur="1.5s" values="36;10;36" keySplines=".6 .0 .8 .0; .0 .8 .0 1"' +
     'keyTimes="0;0.4;1" calcMode="spline" repeatCount="indefinite"/>' +
     '<animate attributeName="opacity" from=".2" to=".2"  begin="0s" ' +
     ' dur="1.5s" values=".1;.7;.1" keySplines=" .6.0 .8 .0; .0 .8 .0 1" ' +
@@ -280,21 +279,21 @@ var animatedSvg =
     'cx="26" cy="20" rx="16" ry="12"><animate attributeName="cy" ' +
     'from="20" to="20" begin="0s" dur="1.5s" values="20;112;20" ' +
     'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes=" 0;0.4;1" ' +
-    'calcMode="spline" repeatCount="2"/> ' +
-    '<animate attributeName="ry" from="16" to="16" begin="0s" ' + 
+    'calcMode="spline" repeatCount="indefinite"/> ' +
+    '<animate attributeName="ry" from="16" to="16" begin="0s" ' +
     'dur="1.5s" values="16;12;16" keySplines=".6 .0 .8 .0; .0 .8 .0 1" ' +
     'keyTimes="0;0.4;1" calcMode="spline" ' +
     'repeatCount="indefinite"/></ellipse></svg>';
 
-// Create an icon object, an object with geographic coordinates and a marker:
-var icon = new H.map.DomIcon(animatedSvg),
-    coords = {lat: teamLat, lng: teamLong},
-    marker = new H.map.DomMarker(coords, {icon: icon});
+  // Create an icon object, an object with geographic coordinates and a marker:
+  var icon = new H.map.DomIcon(animatedSvg),
+    coords = { lat: teamLat, lng: teamLong },
+    marker = new H.map.DomMarker(coords, { icon: icon });
 
-// Set map center and zoom, add the marker to the map:
-map.setCenter(coords);
-map.setZoom(14);
-map.addObject(marker);
+  // Set map center and zoom, add the marker to the map:
+  map.setCenter(coords);
+  map.setZoom(14);
+  map.addObject(marker);
 
   // var coords = { lat: teamLat, lng: teamLong };
 };
@@ -309,7 +308,7 @@ var myLocalStorage = {
   },
 };
 
-console.log(localData);
+console.log("THIS LOCAL DATA WAS LOADED ON SCRIPT.js", localData);
 var userValidation = function (userText) {
   //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
   //var userInput = "Manchester United";
