@@ -43,6 +43,7 @@ input:focus {
 
 #squadListDisplay{
     max-height: 200px;
+    min-width: 800px;
 }
 
 .teamTextContainer  p {

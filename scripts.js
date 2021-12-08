@@ -17,7 +17,8 @@ var submitBtn = document.getElementById("submitBtn");
 var userInputForm = document.getElementById("userInputForm");
 var mapDisplay = document.querySelector(".mapDisplay");
 var squadListDisplay = document.getElementById("squadListDisplay");
-var userInput = ""
+var userInput = null;
+var localData = myLocalStorage.get();
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +27,7 @@ var getUserInput = function (e) {
   e.preventDefault();
   userInput = userInputForm.value;
   console.log("userInput:  " + userInput);
-  leagueFetch(userInput);
+  userValidation(userInput);
 };
 
 submitBtn.addEventListener("click", getUserInput);
@@ -109,59 +110,6 @@ var getAddress = function (teamId) {
     });
   });
 };
-var leagueArray = ["BL1","PL","SA","PD","FL1","DED","PPL"]
-var leagueFetch = function (userInput) {
-  for (var n=0; n< leagueArray.length; n++){
-    
-    $.ajax({
-      headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-      url: `https://api.football-data.org/v2/competitions/${leagueArray[n]}/teams`,
-      dataType: "json",
-      type: "GET",
-    }).done(function (response) {
-      // do something with the response, e.g. isolate the id of a linked resource
-      console.log(response.teams);
-      
-      //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-      //var userInput = "Manchester United";
-      //Coment this in and out to turn off the search function ^^^^^^^^^^^
-      var userInputLower = userInput.toLocaleLowerCase();
-      
-      for (var i = 0; i < response.teams.length; i++) {
-        var teamName = response.teams[i].name.toLocaleLowerCase();
-        console.log(
-          "Name:  " +
-          response.teams[i].name.toLocaleLowerCase() +
-          "  teamID:  " +
-          response.teams[i].id
-          );
-          console.log(response.teams[i].venue);
-          if (teamName.includes(userInputLower)) {
-            console.log("---------------------------id was the same");
-            var teamId = response.teams[i].id;
-            console.log(teamId + " " + teamName);
-          } else console.log("id was not the same");
-        }
-        matchHistory(teamId);
-        activeTeam(teamId);
-        getAddress(teamId);
-        getPlayers(teamId);
-      });
-    }
-};
-
-//manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
-leagueFetch();
-
-// leagueFetch()
-///TODO:
-//-- Finish this search function DONE
-//-- go over Git Branches
-//-- Setup User input
-//-- go over wire frame
-//----
-
-// match history fetch
 var matchHistory = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
@@ -215,6 +163,16 @@ var matchHistory = function (teamId) {
   // console.log("Played Games ------------------", reversePlayed);
 };
 
+// userValidation()
+///TODO:
+//-- Finish this search function DONE
+//-- go over Git Branches
+//-- Setup User input
+//-- go over wire frame
+//----
+
+// match history fetch
+
 var pastGamesList = document.getElementById("pastGamesList");
 var listChild = pastGamesList.getElementsByTagName("li")[0];
 var renderLastFive = function () {
@@ -237,7 +195,6 @@ var renderPlayers = function (squadList) {
     var listItem = document.createElement("li");
     listItem.innerHTML = squadList[i];
     squadListDisplay.appendChild(listItem);
-    
   }
 };
 
@@ -301,24 +258,82 @@ var mapRender = function (teamLat, teamLong) {
       center: { lat: teamLat, lng: teamLong },
     }
   );
+// Create a map object:
 
-  // VB 03/12/21 Tried to add custom marker to map but couldn't get the filepath to work. Saved a custom football pin to a new Img folder.
-  // HERE documentation on map icons: https://developer.here.com/documentation/maps/3.1.30.3/dev_guide/topics/marker-objects.html
 
-  // SVG markup that define icon image
-  var svgMarkup =
-    '<svg width="24" height="24" ' +
-    'xmlns="https://www.w3.org/2000/svg">' +
-    '<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
-    'height="22" /><text x="12" y="18" font-size="12pt" ' +
-    'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
-    'fill="white">!</text></svg>';
+// Define a variable holding SVG mark-up that defines an animated icon image:
+var animatedSvg =
+    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" ' + 
+    'y="0px" style="margin:-112px 0 0 -32px" width="136px"' + 
+    'height="150px" viewBox="0 0 136 150"><ellipse fill="#000" ' +
+    'cx="32" cy="128" rx="36" ry="4"><animate attributeName="cx" ' + 
+    'from="32" to="32" begin="0s" dur="1.5s" values="96;32;96" ' + 
+    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes="0;0.4;1"' + 
+    'calcMode="spline" repeatCount="indefinite"/>' +    
+    '<animate attributeName="rx" from="36" to="36" begin="0s"' +
+    'dur="1.5s" values="36;10;36" keySplines=".6 .0 .8 .0; .0 .8 .0 1"' + 
+    'keyTimes="0;0.4;1" calcMode="spline" repeatCount="indefinite"/>' +
+    '<animate attributeName="opacity" from=".2" to=".2"  begin="0s" ' +
+    ' dur="1.5s" values=".1;.7;.1" keySplines=" .6.0 .8 .0; .0 .8 .0 1" ' +
+    'keyTimes=" 0;0.4;1" calcMode="spline" ' +
+    'repeatCount="indefinite"/></ellipse><ellipse fill="#F19D00" ' +
+    'cx="26" cy="20" rx="16" ry="12"><animate attributeName="cy" ' +
+    'from="20" to="20" begin="0s" dur="1.5s" values="20;112;20" ' +
+    'keySplines=".6 .1 .8 .1; .1 .8 .1 1" keyTimes=" 0;0.4;1" ' +
+    'calcMode="spline" repeatCount="2"/> ' +
+    '<animate attributeName="ry" from="16" to="16" begin="0s" ' + 
+    'dur="1.5s" values="16;12;16" keySplines=".6 .0 .8 .0; .0 .8 .0 1" ' +
+    'keyTimes="0;0.4;1" calcMode="spline" ' +
+    'repeatCount="indefinite"/></ellipse></svg>';
 
-  // Creating icon, object for coordinates and marker
-  var icon = new H.map.Icon(svgMarkup);
-  var coords = { lat: teamLat, lng: teamLong };
-  var marker = new H.map.Marker(coords, { icon: icon });
+// Create an icon object, an object with geographic coordinates and a marker:
+var icon = new H.map.DomIcon(animatedSvg),
+    coords = {lat: teamLat, lng: teamLong},
+    marker = new H.map.DomMarker(coords, {icon: icon});
 
-  //add marker to map
-  map.addObject(marker);
+// Set map center and zoom, add the marker to the map:
+map.setCenter(coords);
+map.setZoom(14);
+map.addObject(marker);
+
+  // var coords = { lat: teamLat, lng: teamLong };
 };
+
+var myLocalStorage = {
+  get: function () {
+    var leagueDataString = localStorage.getItem("leagueData");
+    return JSON.parse(leagueDataString);
+  },
+  set: function (data) {
+    localStorage.setItem("leagueData", JSON.stringify(data));
+  },
+};
+
+console.log(localData);
+var userValidation = function (userText) {
+  //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
+  //var userInput = "Manchester United";
+  //Coment this in and out to turn off the search function ^^^^^^^^^^^
+  var userInputLower = userText.toLocaleLowerCase();
+
+  for (var i = 0; i < localData.length; i++) {
+    var teamName = localData[i].name.toLocaleLowerCase();
+    console.log(
+      "Name:  " +
+        localData[i].name.toLocaleLowerCase() +
+        "  teamID:  " +
+        localData[i].id
+    );
+    if (teamName.includes(userInputLower)) {
+      console.log("---------------------------id was the same");
+      var teamId = localData[i].id;
+      console.log(teamId + " " + teamName);
+      matchHistory(teamId);
+      activeTeam(teamId);
+      getAddress(teamId);
+      getPlayers(teamId);
+    } else console.log("id was not the same");
+  }
+};
+
+//manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
