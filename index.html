@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Find My Football</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"/>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="localStlyes.css" />
   </head>
@@ -37,7 +40,7 @@
           search
         </button>
       </form>
-      <img class="logo" src="./img/mainLogo.png">
+      <img class="logo" src="./img/mainLogo.png" />
     </div>
 
     <!-- overall container holding the pages colum structure -->
@@ -62,57 +65,86 @@
             />
           </div>
 
-          <div class="teamTextContainer ml-16 text-6xl font-medium">
+          <div class="teamTextContainer ml-16 text-4xl font-medium">
             <p class="teamName"></p>
             <p class="stadiumName"></p>
             <div class="founded-nation flex align">
-              <p class="founded text-3xl"></p>
-              <p class="nation text-3xl ml-8"></p>
+              <p class="founded text-2xl"></p>
+              <p class="nation text-2xl ml-8"></p>
             </div>
-            <p class="leagueName"></p>
-            <p class="shortName"></p>
+            <p class="leagueName text-2xl"></p>
+            <p class="shortName text-2xl"></p>
           </div>
         </div>
-        <div class="mapDisplay bg-yellow-600 m-4 p-8 rounded-3xl" id="mapContainer">
+        <div
+          class="mapDisplay bg-yellow-600 m-4 p-8 rounded-3xl"
+          id="mapContainer"
+        >
           <canvas></canvas>
         </div>
       </div>
-      
-      
     </div>
     <div class="bottomRowContainer flex flex-row flex-1">
       <div
-      class="
-        teamInfoContainer
-        flex
-        bg-gray-800
-        m-4
-        p-16
-        flex-auto
-        rounded-3xl
-      ">
-    <div class="lastGamesPlayed">
-        <div class="LastGame1">
-          <ul id="pastGamesList">
-
-          </ul>
-
+        class="
+          teamInfoContainer
+          flex
+          bg-gray-800
+          m-4
+          p-16
+          flex-auto
+          rounded-3xl
+          justify-between
+        "
+      >
+        <div
+          class="
+            lastGamesPlayed
+          "
+        >
+          <p
+          class="
+          font-medium
+            text-3xl text-center text-yellow-600
+            py-3
+            "
+          >RECENT SCORES</p>
+          <ul 
+          class="
+          text-center
+          text-2xl
+          " 
+          id="pastGamesList"></ul>
         </div>
-      </div>
-      <ul id="squadListDisplay" class="gray-1000 overflow-scroll">
-      
-      </ul>
 
-
-
-
-
+        <div 
+        class="
+        playerList 
+        border-black border-4
+        ">
+          <p
+          class="
+          text-medium text-center text-3xl text-yellow-600
+          ">PLAYERS</p>
+          <ul
+            id="squadListDisplay"
+            class="
+            text-center 
+            gray-1000 
+            overflow-y-auto
+            
+            "
+          ></ul>
+        </div>
       </div>
     </div>
 
     <!-- scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="module" src="https://js.api.here.com/v3/3.1/mapsjs.bundle.js"></script>
+    <script
+      type="module"
+      src="https://js.api.here.com/v3/3.1/mapsjs.bundle.js"
+    ></script>
     <script src="onload.js"></script>
     <script src="scripts.js"></script>
   </body>

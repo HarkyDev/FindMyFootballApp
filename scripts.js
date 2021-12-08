@@ -136,7 +136,7 @@ var matchHistory = function (teamId) {
           homeTeamName +
             " " +
             homeScore +
-            ":" +
+            " - " +
             awayScore +
             " " +
             awayTeamName +
@@ -180,10 +180,11 @@ var renderLastFive = function () {
   // need to reset the innerHtml of the ul but cant figure it out yet - DONE!
   // Create appends for Last 5 played games array
   for (var i = 1; i < displayLastFive.length; i++) {
-    var listItem = document.createElement("li");
+    var gamesListItem = document.createElement("li");
 
-    listItem.innerHTML = displayLastFive[i];
-    pastGamesList.appendChild(listItem);
+    gamesListItem.innerHTML = displayLastFive[i];
+    pastGamesList.appendChild(gamesListItem);
+    gamesListItem.setAttribute("class", "text-gray-50 rounded p-2 m-1 w-700px min-w-full")
   }
 };
 //Eh-
@@ -192,9 +193,20 @@ var renderPlayers = function (squadList) {
   $("#squadListDisplay").empty();
   for (var i = 0; i < squadList.length; i++) {
     console.log(squadList[i]);
-    var listItem = document.createElement("li");
-    listItem.innerHTML = squadList[i];
-    squadListDisplay.appendChild(listItem);
+
+    var playerListItem = document.createElement("li");
+    var nameLine = document.createElement("p");
+    var nationalityLine = document.createElement("p");
+    var positionLine = document.createElement("p");
+
+    nameLine.innerHTML = "Name: " + squadList[i].name;
+    nationalityLine.innerHTML = "Nationality: " + squadList[i].nationality;
+    positionLine.innerHTML = "Position: " + squadList[i].position;
+
+    playerListItem.append(nameLine, nationalityLine, positionLine)
+    squadListDisplay.appendChild(playerListItem);
+    // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
+    playerListItem.setAttribute("class", "player-Card bg-yellow-600 text-black rounded m-6");
   }
 };
 
@@ -223,12 +235,16 @@ var getPlayers = function (teamId) {
     var squadList = [];
     // do something with the response, e.g. isolate the id of a linked resource#
     for (var i = 0; i < response.squad.length; i++) {
+      var playerName = response.squad[i].name;
+      var playerNat = response.squad[i].nationality;
+      var playerPos = response.squad[i].position;
       squadList.push(
-        response.squad[i].name +
-          " " +
-          response.squad[i].nationality +
-          " " +
-          response.squad[i].position
+          {
+            name: playerName,
+            nationality: playerNat,
+            position: playerPos
+  
+          }
       );
     }
     console.log(squadList);
@@ -295,7 +311,11 @@ var mapRender = function (teamLat, teamLong) {
   map.setZoom(14);
   map.addObject(marker);
 
-  // var coords = { lat: teamLat, lng: teamLong };
+  var directionsButton = document.createElement("button");
+  directionsButton.innerHTML = "Get Directions";
+  directionsButton.setAttribute("class", "bg-gray-900 rounded p-1 m-1 object-bottom")
+  var mapBox = document.getElementById("mapContainer");
+  mapBox.appendChild(directionsButton);
 };
 
 var myLocalStorage = {
