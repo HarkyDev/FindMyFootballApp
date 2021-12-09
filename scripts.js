@@ -1,6 +1,7 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // var gamesList = document.createElement("ul");
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
+var myGoogleAPI = "AIzaSyAd_1DIyVxvCXV7xLWOBeLPS1Na3GK1aJ0";
 var teamId = null;
 var playedGames = []; //think we should push to an array and cut off the last 5 and just display that info
 var displayLastFive = [];
@@ -19,6 +20,7 @@ var mapDisplay = document.querySelector(".mapDisplay");
 var squadListDisplay = document.getElementById("squadListDisplay");
 var userInput = null;
 var localData = myLocalStorage.get();
+var directionsButton = document.createElement("button");
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,9 +82,7 @@ var getAddress = function (teamId) {
     teamAddress.toString();
     var webTeamAddress = teamAddress.replaceAll(" ", "+");
 
-    //var webTeamAddress = "Fulham+Road+London+SW6+1HS";
     console.log(webTeamAddress);
-    // var corsAnywhere = "https://course-anywhere.herokuapp.com/"
 
     // API call using stadium address for map coordinates
     $.ajax({
@@ -136,7 +136,7 @@ var matchHistory = function (teamId) {
           homeTeamName +
             " " +
             homeScore +
-            ":" +
+            " - " +
             awayScore +
             " " +
             awayTeamName +
@@ -180,10 +180,14 @@ var renderLastFive = function () {
   // need to reset the innerHtml of the ul but cant figure it out yet - DONE!
   // Create appends for Last 5 played games array
   for (var i = 1; i < displayLastFive.length; i++) {
-    var listItem = document.createElement("li");
+    var gamesListItem = document.createElement("li");
 
-    listItem.innerHTML = displayLastFive[i];
-    pastGamesList.appendChild(listItem);
+    gamesListItem.innerHTML = displayLastFive[i];
+    pastGamesList.appendChild(gamesListItem);
+    gamesListItem.setAttribute(
+      "class",
+      "text-gray-50 rounded p-2 m-1 w-700px min-w-full"
+    );
   }
 };
 //Eh-
@@ -192,9 +196,23 @@ var renderPlayers = function (squadList) {
   $("#squadListDisplay").empty();
   for (var i = 0; i < squadList.length; i++) {
     console.log(squadList[i]);
-    var listItem = document.createElement("li");
-    listItem.innerHTML = squadList[i];
-    squadListDisplay.appendChild(listItem);
+
+    var playerListItem = document.createElement("li");
+    var nameLine = document.createElement("p");
+    var nationalityLine = document.createElement("p");
+    var positionLine = document.createElement("p");
+
+    nameLine.innerHTML = "Name: " + squadList[i].name;
+    nationalityLine.innerHTML = "Nationality: " + squadList[i].nationality;
+    positionLine.innerHTML = "Position: " + squadList[i].position;
+
+    playerListItem.append(nameLine, nationalityLine, positionLine);
+    squadListDisplay.appendChild(playerListItem);
+    // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
+    playerListItem.setAttribute(
+      "class",
+      "player-Card bg-yellow-600 text-black rounded m-6"
+    );
   }
 };
 
@@ -223,13 +241,14 @@ var getPlayers = function (teamId) {
     var squadList = [];
     // do something with the response, e.g. isolate the id of a linked resource#
     for (var i = 0; i < response.squad.length; i++) {
-      squadList.push(
-        response.squad[i].name +
-          " " +
-          response.squad[i].nationality +
-          " " +
-          response.squad[i].position
-      );
+      var playerName = response.squad[i].name;
+      var playerNat = response.squad[i].nationality;
+      var playerPos = response.squad[i].position;
+      squadList.push({
+        name: playerName,
+        nationality: playerNat,
+        position: playerPos,
+      });
     }
     console.log(squadList);
     renderPlayers(squadList);
@@ -295,7 +314,22 @@ var mapRender = function (teamLat, teamLong) {
   map.setZoom(14);
   map.addObject(marker);
 
-  // var coords = { lat: teamLat, lng: teamLong };
+  //Add get directions function to map using google maps
+  var mapBox = document.getElementById("mapContainer");
+  mapBox.append(directionsButton);
+
+ 
+  directionsButton.innerHTML = "Get Directions";
+  directionsButton.setAttribute(
+    "class",
+    "bg-gray-900 hover:bg-gray-700 rounded p-1 m-1 object-bottom"
+  );
+
+      directionsButton.onclick = function () {
+        window.open(
+          `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
+        );
+      };
 };
 
 var myLocalStorage = {
@@ -331,8 +365,7 @@ var userValidation = function (userText) {
       activeTeam(teamId);
       getAddress(teamId);
       getPlayers(teamId);
+      getDirections(teamId);
     } else console.log("id was not the same");
   }
 };
-
-//manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
