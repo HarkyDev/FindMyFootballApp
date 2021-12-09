@@ -1,6 +1,7 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // var gamesList = document.createElement("ul");
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
+var myGoogleAPI = "AIzaSyAd_1DIyVxvCXV7xLWOBeLPS1Na3GK1aJ0";
 var teamId = null;
 var playedGames = []; //think we should push to an array and cut off the last 5 and just display that info
 var displayLastFive = [];
@@ -19,6 +20,7 @@ var mapDisplay = document.querySelector(".mapDisplay");
 var squadListDisplay = document.getElementById("squadListDisplay");
 var userInput = null;
 var localData = myLocalStorage.get();
+var directionsButton = document.createElement("button");
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,9 +82,7 @@ var getAddress = function (teamId) {
     teamAddress.toString();
     var webTeamAddress = teamAddress.replaceAll(" ", "+");
 
-    //var webTeamAddress = "Fulham+Road+London+SW6+1HS";
     console.log(webTeamAddress);
-    // var corsAnywhere = "https://course-anywhere.herokuapp.com/"
 
     // API call using stadium address for map coordinates
     $.ajax({
@@ -184,7 +184,10 @@ var renderLastFive = function () {
 
     gamesListItem.innerHTML = displayLastFive[i];
     pastGamesList.appendChild(gamesListItem);
-    gamesListItem.setAttribute("class", "text-gray-50 rounded p-2 m-1 w-700px min-w-full")
+    gamesListItem.setAttribute(
+      "class",
+      "text-gray-50 rounded p-2 m-1 w-700px min-w-full"
+    );
   }
 };
 //Eh-
@@ -203,10 +206,13 @@ var renderPlayers = function (squadList) {
     nationalityLine.innerHTML = "Nationality: " + squadList[i].nationality;
     positionLine.innerHTML = "Position: " + squadList[i].position;
 
-    playerListItem.append(nameLine, nationalityLine, positionLine)
+    playerListItem.append(nameLine, nationalityLine, positionLine);
     squadListDisplay.appendChild(playerListItem);
     // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
-    playerListItem.setAttribute("class", "player-Card bg-yellow-600 text-black rounded m-6");
+    playerListItem.setAttribute(
+      "class",
+      "player-Card bg-yellow-600 text-black rounded m-6"
+    );
   }
 };
 
@@ -238,14 +244,11 @@ var getPlayers = function (teamId) {
       var playerName = response.squad[i].name;
       var playerNat = response.squad[i].nationality;
       var playerPos = response.squad[i].position;
-      squadList.push(
-          {
-            name: playerName,
-            nationality: playerNat,
-            position: playerPos
-  
-          }
-      );
+      squadList.push({
+        name: playerName,
+        nationality: playerNat,
+        position: playerPos,
+      });
     }
     console.log(squadList);
     renderPlayers(squadList);
@@ -311,11 +314,22 @@ var mapRender = function (teamLat, teamLong) {
   map.setZoom(14);
   map.addObject(marker);
 
-  var directionsButton = document.createElement("button");
-  directionsButton.innerHTML = "Get Directions";
-  directionsButton.setAttribute("class", "bg-gray-900 rounded p-1 m-1 object-bottom")
+  //Add get directions function to map using google maps
   var mapBox = document.getElementById("mapContainer");
-  mapBox.appendChild(directionsButton);
+  mapBox.append(directionsButton);
+
+ 
+  directionsButton.innerHTML = "Get Directions";
+  directionsButton.setAttribute(
+    "class",
+    "bg-gray-900 hover:bg-gray-700 rounded p-1 m-1 object-bottom"
+  );
+
+      directionsButton.onclick = function () {
+        window.open(
+          `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
+        );
+      };
 };
 
 var myLocalStorage = {
@@ -351,8 +365,7 @@ var userValidation = function (userText) {
       activeTeam(teamId);
       getAddress(teamId);
       getPlayers(teamId);
+      getDirections(teamId);
     } else console.log("id was not the same");
   }
 };
-
-//manually calling button all the time REMOVE IN FINAL BUILD - ONLY HEAR FOR EASE OF DESIGN
