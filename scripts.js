@@ -107,7 +107,9 @@ var getAddress = function (teamId) {
       // rendering are easier to reset if they're set up as functions, if they're set as just a constant criteria thats
       // what causes the writing of items on top of eachother like multiple maps, you have to reset the content before each render
       // Display map on page
-      console.log("------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- ")
+      console.log(
+        "------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- "
+      );
     });
   });
 };
@@ -144,7 +146,6 @@ var matchHistory = function (teamId) {
             " " +
             comp
         );
-        
       } else {
         console.log("GAMES NOT PLAYED YET");
       }
@@ -162,7 +163,6 @@ var matchHistory = function (teamId) {
     // render it as a function and took it in the function thats on submit
   });
 };
-
 
 // match history fetch
 
@@ -361,13 +361,12 @@ var userValidation = function (userText) {
   }
 };
 
-
 //on change size event we should be re rendering the map
 // const widthOutput = document.querySelector("#width");
 // console.log(widthOutput);
 
 var testFunc = () => {
-console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-}
+  console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+};
 
-window.addEventListener('resize', getUserInput)
+window.addEventListener("resize", getUserInput);

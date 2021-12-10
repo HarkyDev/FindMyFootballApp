@@ -1,7 +1,15 @@
+/*GLOBAL STYLES*/
 * {
   color: aliceblue;
 }
+/*NAV CONTAINER*/
+.largeDivContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+/*SEARCHBAR*/
 input {
   min-height: 60px;
   border-radius: 32px;
@@ -12,6 +20,10 @@ input:focus {
   outline: none;
 }
 
+#userInput {
+  position: relative;
+}
+
 .submitBtn {
   min-height: 60px;
   border-top-left-radius: 32px;
@@ -19,20 +31,39 @@ input:focus {
   margin-left: 32px;
   text-align: right;
 }
-  
+/*MAP DISPLAY*/
 .mapDisplay {
   height: auto;
   min-width: 500px;
   min-height: 300px;
 }
 
+canvas {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
 
+/*PLAYER LIST*/
 #squadListDisplay {
-  max-height: 300px;    
+  max-height: 300px;
   min-width: 500px;
 }
 
+/*CUSTOM PLAYER LIST SCROLLBAR STYLES*/
+#squadListDisplay::-webkit-scrollbar {
+  width: 20px;
+}
 
+/* Track */
+#squadListDisplay::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+#squadListDisplay::-webkit-scrollbar-thumb {
+  background-color: rgb(202 138 4);
+  border-radius: 10px;
+}
 
 #player-Card {
   width: 66%;
@@ -41,208 +72,168 @@ input:focus {
   background: #8c8;
 }
 
+.squadListDisplay {
+  max-height: 400px;
+  overflow: scroll;
+}
+
+/*TEAM INFO*/
 .teamTextContainer p {
   margin-top: 8px;
 }
 
+/*RECENT SCORES*/
 .pastGamesJS {
-    min-width: 700px;
+  min-width: 700px;
 }
 
-#squadListDisplay::-webkit-scrollbar {
-  width: 20px;
-}
-
-/* Track */
-#squadListDisplay::-webkit-scrollbar-track {
- 
-  border-radius: 10px;
-}
-
-/* Handle */
-#squadListDisplay::-webkit-scrollbar-thumb {
-    background-color: rgb(202 138 4);   
-    border-radius: 10px;
-}
-
-#userInput {
-    position: relative;
-}
-
-.largeDivContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-/* media query to crop map */
-
-
-
-canvas {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+.pastGamesJS {
+  background-color: rgb(31 41 55);
+  max-width: 200px;
 }
 
 .recentScores {
-   border-radius: 16px;
-   padding: 8px;
-
+  border-radius: 16px;
+  padding: 8px;
 }
 
-@media only screen and (max-width:  1381px) {
-    .topRowContainer {
-        display: flex;
-    }
-    .mapDisplay{
-        min-width: 94vw;
-        justify-content: center;
-    }
+/*MEDIA QUERIES*/
+
+/*DESKTOP*/
+@media only screen and (max-width: 1381px) {
+  .topRowContainer {
+    display: flex;
   }
-
-
-
-@media only screen and (max-width:  1176px) {
-    .navContainer {
-        flex-direction: column-reverse;
-        padding: 24px;
-    }
+  .mapDisplay {
+    min-width: 94vw;
+    justify-content: center;
   }
+}
+/*LAPTOP*/
+@media only screen and (max-width: 1176px) {
+  .navContainer {
+    flex-direction: column-reverse;
+    padding: 24px;
+  }
+}
 @media only screen and (max-width: 620px) {
-    .recentScores  li {
-        font-size: 12px;
-    }
-    .recentScores  {
-        padding: 0px;
-    }
-    input {
-        min-width: 280px;
-    }
-    .mapDisplay {
-        min-width: 90vw;
-      }
-    
+  .recentScores li {
+    font-size: 12px;
   }
-  @media only screen and (max-width: 800px) {
+  .recentScores {
+    padding: 0px;
+  }
+  input {
+    min-width: 280px;
+  }
+  .mapDisplay {
+    min-width: 90vw;
+  }
+}
+@media only screen and (max-width: 800px) {
   .pastGamesJS {
-      min-width: 400px;
+    min-width: 400px;
   }
+}
+
+@media only screen and (max-width: 400px) {
+  .pastGamesJS {
+    min-width: 200px;
   }
-
-  @media only screen and (max-width: 400px) {
-    .pastGamesJS {
-        min-width: 200px;
-    }
-    }
-
-
-
+}
+/*TABLET*/
 @media only screen and (max-width: 620px) {
-    .teamInfoContainer {
-        flex-direction: column;
-        justify-content: center;
-    }
-    .teamCrestContainer{
-        justify-content: center;
-    }
-    .teamTextContainer p {
-       font-size: 10px;
-    }
-    .teamCrest img{
-       flex-shrink: 1;
-       max-width: 100px;
-    }
-    #squadListDisplay {
-        max-height: 600px;    
-        min-width: 20px;
-        max-width: 280px;
-      }
-    
-    
+  .teamInfoContainer {
+    flex-direction: column;
+    justify-content: center;
   }
+  .teamCrestContainer {
+    justify-content: center;
+  }
+  .teamTextContainer p {
+    font-size: 10px;
+  }
+  .teamCrest img {
+    flex-shrink: 1;
+    max-width: 100px;
+  }
+  #squadListDisplay {
+    max-height: 600px;
+    min-width: 20px;
+    max-width: 280px;
+  }
+}
+/*MOBILE*/
 @media only screen and (max-width: 440px) {
-    .navContainer {
-        align-items: center;
-    }
-    .recentTitle{
-        font-size: 8px;
-    }
-    .topRowContainer{
-        max-width: 100vw;
-        font-size: 15px;
-    }
-
-    .largeDivContainer{
-        max-width: 200px;
-    }
-    input{
-        max-width: 200px;
-        justify-content: center;
-        align-items: center;
-        min-width: 200px;
-        font-size: 5px;
-        margin-left: 0;
-    }
-
-    .teamTextContainer {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-    }
-
-    .teamTextContainer p {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        font-size: 20px;
-    }
-
-    .teamInfoContainer {
-        justify-content: center;
-        padding: 5px;
-    }
-    .squadListDisplay {
-        font-size: 10px;
-        max-height: 300px;
-    } 
-    .recentScores  li {
-        font-size: 8px;
-    }
-    .player-Card{
-        font-size: 12px;
-    }
-
-    #playerList {
-        max-height: 300px;
-    }
-    #squadListDisplay {
-        max-height: 600px;    
-        max-width: 180px;
-      }
-      .largeDivContainer{
-          max-width: 100px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-      }
-
-      .formContainer{
-          font-size: 4px;
-      }
-      .pastGamesJS {
-        min-width: 200px;
-    }
-      
+  .navContainer {
+    align-items: center;
+  }
+  .recentTitle {
+    font-size: 8px;
+  }
+  .topRowContainer {
+    max-width: 100vw;
+    font-size: 15px;
   }
 
+  .largeDivContainer {
+    max-width: 200px;
+  }
+  input {
+    max-width: 200px;
+    justify-content: center;
+    align-items: center;
+    min-width: 200px;
+    font-size: 5px;
+    margin-left: 0;
+  }
+
+  .teamTextContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .teamTextContainer p {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-size: 20px;
+  }
+
+  .teamInfoContainer {
+    justify-content: center;
+    padding: 5px;
+  }
+  .squadListDisplay {
+    font-size: 10px;
+    max-height: 300px;
+  }
+  .recentScores li {
+    font-size: 8px;
+  }
+  .player-Card {
+    font-size: 12px;
+  }
+
+  #playerList {
+    max-height: 300px;
+  }
+  #squadListDisplay {
+    max-height: 600px;
+    max-width: 180px;
+  }
+  .largeDivContainer {
+    max-width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .formContainer {
+    font-size: 4px;
+  }
   .pastGamesJS {
-    background-color: rgb(31 41 55);	
-      max-width: 200px;
+    min-width: 200px;
   }
-
-
-.squadListDisplay{
-    max-height: 400px;
-    overflow: scroll;
 }
