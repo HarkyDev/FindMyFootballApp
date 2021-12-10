@@ -1,3 +1,4 @@
+//Local Storage function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var myLocalStorage = {
   get: function () {
     var leagueDataString = localStorage.getItem("leagueData");
@@ -7,10 +8,13 @@ var myLocalStorage = {
     localStorage.setItem("leagueData", JSON.stringify(data));
   },
 };
+//Local Storage function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//League Fetch function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var leagueFetch = async function () {
   var leagueArray = ["BL1", "PL", "FL1", "SA", "PD", "PPL", "DED"];
   var teamsData = [];
+  //Loop to check and get data from each league
   for (var n = 0; n < leagueArray.length; n++) {
     var response = await $.ajax({
       headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
@@ -18,21 +22,24 @@ var leagueFetch = async function () {
       dataType: "json",
       type: "GET",
     });
-    // console.log(response.teams.length);
-
+    //Loop to store recieved data as desired
     for (var i = 0; i < response.teams.length; i++) {
       var teamObject = {
         name: response.teams[i].name,
         id: response.teams[i].id,
       };
+      //Push to empty array
       teamsData.push(teamObject);
     }
   }
   console.log("final data", teamsData);
   location.reload();
+  //Set data to local storage
   myLocalStorage.set(teamsData);
 };
+//League Fetch function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Get local storage data, run leagueFetch if empty
 var localData = myLocalStorage.get();
 console.log(localData);
 //leagueFetch();
