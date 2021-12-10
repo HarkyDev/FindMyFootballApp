@@ -11,7 +11,7 @@ var myLocalStorage = {
 
 
 var leagueFetch = async function () {
-    var leagueArray = ["BL1", "PL"];
+    var leagueArray = ["BL1", "PL", "FL1", "SA", "PD", "PPL", "DED"];
     var teamsData = [];
     for (var n = 0; n < leagueArray.length; n++) {
         var response = await $.ajax({
@@ -21,7 +21,7 @@ var leagueFetch = async function () {
             type: "GET",
         });    
         // console.log(response.teams.length);
-        // console.log(localData)
+        
         for (var i = 0; i < response.teams.length; i++) {
             var teamObject = {
                 name: response.teams[i].name,
@@ -38,7 +38,8 @@ var leagueFetch = async function () {
 
 
 var localData = myLocalStorage.get()
-
+console.log(localData)
+//leagueFetch();
 if (!localData){
     leagueFetch();
     console.log("local data was empty")

@@ -182,13 +182,29 @@ canvas {
         align-items: center;
         min-width: 200px;
         font-size: 5px;
+        margin-left: 0;
     }
+
+    .teamTextContainer {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .teamTextContainer p {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        font-size: 20px;
+    }
+
     .teamInfoContainer {
         justify-content: center;
         padding: 5px;
     }
     .squadListDisplay {
         font-size: 10px;
+        max-height: 300px;
     } 
     .recentScores  li {
         font-size: 8px;

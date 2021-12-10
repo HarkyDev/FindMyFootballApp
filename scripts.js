@@ -26,6 +26,7 @@ var directionsButton = document.createElement("button");
 
 var getUserInput = function (e) {
   e.preventDefault();
+  localStorage.clear();
   userInput = userInputForm.value;
   console.log("userInput:  " + userInput);
   userValidation(userInput);
@@ -203,7 +204,7 @@ var renderPlayers = function (squadList) {
     var positionLine = document.createElement("p");
 
     nameLine.innerHTML = "Name: " + squadList[i].name;
-    nationalityLine.innerHTML = "Nationality: " + squadList[i].nationality;
+    nationalityLine.innerHTML = "Home Country: " + squadList[i].nationality;
     positionLine.innerHTML = "Position: " + squadList[i].position;
 
     playerListItem.append(nameLine, nationalityLine, positionLine);
