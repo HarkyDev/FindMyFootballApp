@@ -372,7 +372,11 @@ var userValidation = function (userText) {
 
 
 //on change size event we should be re rendering the map
-const widthOutput = document.querySelector("#width");
-console.log(widthOutput);
+// const widthOutput = document.querySelector("#width");
+// console.log(widthOutput);
 
+var testFunc = () => {
+console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+}
 
+window.addEventListener('resize', getUserInput)

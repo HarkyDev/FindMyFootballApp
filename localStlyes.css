@@ -29,10 +29,9 @@ input:focus {
 .mapDisplay {
   height: auto;
   min-width: 500px;
-  min-height: 40vh;
+  min-height: 300px;
 }
 
-.
 
 #squadListDisplay {
   max-height: 300px;    
@@ -129,8 +128,10 @@ canvas {
 @media only screen and (max-width:  1381px) {
     .topRowContainer {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+    }
+    .mapDisplay{
+        min-width: 94vw;
+        justify-content: space-around;
     }
   }
 
@@ -162,6 +163,12 @@ canvas {
       min-width: 400px;
   }
   }
+
+  @media only screen and (max-width: 400px) {
+    .pastGamesJS {
+        min-width: 200px;
+    }
+    }
 
 
 
@@ -245,13 +252,15 @@ canvas {
   }
 
   .pastGamesJS {
-      background-color: green;
+    background-color: rgb(31 41 55);	
       max-width: 200px;
   }
 
 
-
-
-
-
-
+.squadListDisplay{
+    max-height: 400px;
+    overflow: scroll;
+}
+.topRowContainer {
+    outline: red solid 4px;
+}
