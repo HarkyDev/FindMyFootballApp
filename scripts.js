@@ -1,5 +1,4 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// var gamesList = document.createElement("ul");
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var myGoogleAPI = "AIzaSyAd_1DIyVxvCXV7xLWOBeLPS1Na3GK1aJ0";
 var teamId = null;
@@ -209,7 +208,6 @@ var renderPlayers = function (squadList) {
 
     playerListItem.append(nameLine, nationalityLine, positionLine);
     squadListDisplay.appendChild(playerListItem);
-    // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
     playerListItem.setAttribute(
       "class",
       "player-Card text-xl bg-gray-800 text-black rounded-lg m-2 p-2 flex-shrink"

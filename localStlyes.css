@@ -1,13 +1,11 @@
 * {
   color: aliceblue;
-  /* outline: red solid 4px; */
 }
 
 input {
   min-height: 60px;
   border-radius: 32px;
   min-width: 500px;
-  /* margin: 16px; */
   margin-left: 32px;
 }
 input:focus {
@@ -16,14 +14,10 @@ input:focus {
 
 .submitBtn {
   min-height: 60px;
-  /* border-radius-top-right: 32px; */
   border-top-left-radius: 32px;
   border-bottom-left-radius: 32px;
-  /* margin: 16px; */
   margin-left: 32px;
   text-align: right;
-  /* position: relative;
-  left: -120px; */
 }
   
 .mapDisplay {
@@ -45,7 +39,6 @@ input:focus {
   height: 200px;
   margin-right: 10px;
   background: #8c8;
-  counter-increment: player-Card;
 }
 
 .teamTextContainer p {
@@ -76,39 +69,12 @@ input:focus {
     position: relative;
 }
 
-.formContainer {
-    /* outline: 4px red solid; */
-}
-
-.logo{
-    /* outline: 4px green solid; */
-    
-
-}
-
 .largeDivContainer {
-    /* outline: 4px blue solid; */
     display: flex;
     justify-content: center;
     align-items: center;
 
 }
-
-
-.teamInfoContainer {
-    /* outline: red solid 4px; */
-}
-
-.bottomRowContainer{
-    /* outline: red solid 4px; */
-
-}
-
-/* .mapDisplay {
-    min-height: 400px;
-    min-width: 800px;
-} */
-
 
 /* media query to crop map */
 
@@ -131,7 +97,7 @@ canvas {
     }
     .mapDisplay{
         min-width: 94vw;
-        justify-content: space-around;
+        justify-content: center;
     }
   }
 
@@ -173,13 +139,6 @@ canvas {
 
 
 @media only screen and (max-width: 620px) {
-    .recentScores  li {
-        /* font-size: 12px; */
-        /* max-width: 300px; */
-    }
-    .recentScores  {
-        /* max-width: 100px; */
-    }
     .teamInfoContainer {
         flex-direction: column;
         justify-content: center;
@@ -207,16 +166,22 @@ canvas {
         font-size: 8px;
     }
     .topRowContainer{
-        max-width: 80vw;
+        max-width: 100vw;
+        font-size: 15px;
+    }
+    .contentContainer {
+        
     }
     .largeDivContainer{
         max-width: 200px;
     }
     input{
         max-width: 200px;
+        justify-content: center;
     }
     .teamInfoContainer {
-        padding: 2px;
+        justify-content: center;
+        padding: 5px;
     }
     .squadListDisplay {
         font-size: 10px;
