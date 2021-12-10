@@ -242,6 +242,3 @@ canvas {
     max-height: 400px;
     overflow: scroll;
 }
-.topRowContainer {
-    outline: red solid 4px;
-}
