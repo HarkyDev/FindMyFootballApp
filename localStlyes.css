@@ -212,6 +212,10 @@ canvas {
     .player-Card{
         font-size: 12px;
     }
+
+    #playerList {
+        max-height: 300px;
+    }
     #squadListDisplay {
         max-height: 600px;    
         max-width: 180px;

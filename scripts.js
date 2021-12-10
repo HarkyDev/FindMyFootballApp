@@ -144,7 +144,7 @@ var matchHistory = function (teamId) {
             " " +
             comp
         );
-        // console.log(homeTeamName);
+        
       } else {
         console.log("GAMES NOT PLAYED YET");
       }
@@ -161,16 +161,8 @@ var matchHistory = function (teamId) {
     //this rendering needs to be triggered upon the search this way we can took a reset of the content/innerHTML init aswell/
     // render it as a function and took it in the function thats on submit
   });
-  // console.log("Played Games ------------------", reversePlayed);
 };
 
-// userValidation()
-///TODO:
-//-- Finish this search function DONE
-//-- go over Git Branches
-//-- Setup User input
-//-- go over wire frame
-//----
 
 // match history fetch
 
