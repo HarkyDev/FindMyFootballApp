@@ -107,6 +107,7 @@ var getAddress = function (teamId) {
       // rendering are easier to reset if they're set up as functions, if they're set as just a constant criteria thats
       // what causes the writing of items on top of eachother like multiple maps, you have to reset the content before each render
       // Display map on page
+      console.log("------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- ")
     });
   });
 };
@@ -186,7 +187,7 @@ var renderLastFive = function () {
     pastGamesList.appendChild(gamesListItem);
     gamesListItem.setAttribute(
       "class",
-      "text-gray-50 rounded p-2 m-1 w-700px min-w-full"
+      "pastGamesJS text-gray-50 rounded p-2 m-1 shrink-1  "
     );
   }
 };
@@ -211,7 +212,7 @@ var renderPlayers = function (squadList) {
     // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
     playerListItem.setAttribute(
       "class",
-      "player-Card bg-yellow-600 text-black rounded m-6"
+      "player-Card text-xl bg-gray-800 text-black rounded-lg m-2 p-2 flex-shrink"
     );
   }
 };
@@ -315,21 +316,20 @@ var mapRender = function (teamLat, teamLong) {
   map.addObject(marker);
 
   //Add get directions function to map using google maps
-  var mapBox = document.getElementById("mapContainer");
-  mapBox.append(directionsButton);
+  // var mapBox = document.getElementById("mapContainer");
+  mapDisplay.append(directionsButton);
 
- 
   directionsButton.innerHTML = "Get Directions";
   directionsButton.setAttribute(
     "class",
-    "bg-gray-900 hover:bg-gray-700 rounded p-1 m-1 object-bottom"
+    "directionButton bg-white text-yellow-600  font-medium hover:bg-gray-300 p-2 rounded-bl-2xl rounded-br-2xl "
   );
 
-      directionsButton.onclick = function () {
-        window.open(
-          `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
-        );
-      };
+  directionsButton.onclick = function () {
+    window.open(
+      `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
+    );
+  };
 };
 
 var myLocalStorage = {
@@ -369,3 +369,10 @@ var userValidation = function (userText) {
     } else console.log("id was not the same");
   }
 };
+
+
+//on change size event we should be re rendering the map
+const widthOutput = document.querySelector("#width");
+console.log(widthOutput);
+
+
