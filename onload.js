@@ -32,7 +32,7 @@ var leagueFetch = async function () {
       teamsData.push(teamObject);
     }
   }
-  console.log("final data", teamsData);
+  //console.log("final data", teamsData);
   location.reload();
   //Set data to local storage
   myLocalStorage.set(teamsData);

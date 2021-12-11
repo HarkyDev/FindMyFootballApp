@@ -26,7 +26,6 @@ var directionsButton = document.createElement("button");
 
 var getUserInput = function (e) {
   e.preventDefault();
-  localStorage.clear();
   userInput = userInputForm.value;
   console.log("userInput:  " + userInput);
   userValidation(userInput);
