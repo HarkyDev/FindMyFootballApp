@@ -11,14 +11,14 @@ var myLocalStorage = {
 //Local Storage function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //League Fetch function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-var leagueFetch = async function () {
-  var leagueArray = ["BL1", "PL", "FL1", "SA", "PD", "PPL", "DED"];
+var fetchLeague = async function () {
+  var leagueArr = ["BL1", "PL", "FL1", "SA", "PD", "PPL", "DED"];
   var teamsData = [];
   //Loop to check and get data from each league
-  for (var n = 0; n < leagueArray.length; n++) {
+  for (var n = 0; n < leagueArr.length; n++) {
     var response = await $.ajax({
       headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
-      url: `https://api.football-data.org/v2/competitions/${leagueArray[n]}/teams`,
+      url: `https://api.football-data.org/v2/competitions/${leagueArr[n]}/teams`,
       dataType: "json",
       type: "GET",
     });
@@ -39,11 +39,13 @@ var leagueFetch = async function () {
 };
 //League Fetch function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Get local storage data, run leagueFetch if empty
+// Get local storage data, run fetchLeague if empty
+var init = function () {
 var localData = myLocalStorage.get();
-console.log(localData);
-//leagueFetch();
+//console.log(localData);
 if (!localData) {
-  leagueFetch();
+  fetchLeague();
   console.log("local data was empty");
 }
+};
+

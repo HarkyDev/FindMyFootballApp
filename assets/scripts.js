@@ -2,71 +2,73 @@
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var myGoogleAPI = "AIzaSyAd_1DIyVxvCXV7xLWOBeLPS1Na3GK1aJ0";
 var teamId = null;
-var playedGames = []; 
-var displayLastFive = [];
-var stadiumName = document.querySelector(".stadiumName");
-var teamName = document.querySelector(".teamName");
-var founded = document.querySelector(".founded");
-var nation = document.querySelector(".nation");
-var leagueName = document.querySelector(".leagueName");
-var shortName = document.querySelector(".shortName");
-var teamCrest = document.getElementById("teamCrest");
-var mapImg = document.querySelector(".mapImg");
-var gamesDisplay = document.querySelector(".LastGame1");
-var submitBtn = document.getElementById("submitBtn");
-var userInputForm = document.getElementById("userInputForm");
-var mapDisplay = document.querySelector(".mapDisplay");
-var squadListDisplay = document.getElementById("squadListDisplay");
+var playedGamesArr = []; 
+var getLastFiveScoresArr = [];
+var stadiumNameEl = document.querySelector(".stadium-Name");
+var teamNameEl = document.querySelector(".team-Name");
+var foundedEl = document.querySelector(".founded");
+var nationEl = document.querySelector(".nation");
+var leagueNameEl = document.querySelector(".league-Name");
+var shortNameEl = document.querySelector(".short-Name");
+var teamCrestEl = document.getElementById("team-Crest");
+var gamesDisplayEl = document.querySelector(".LastGame1");
+var submitBtlEl = document.getElementById("submit-Btn");
+var userInputEl = document.getElementById("user-Input-Form");
+var mapDisplayEl = document.querySelector(".map-Display");
+var squadDisplayEl = document.getElementById("squad-List-Display");
+var canvasTag = document.getElementsByTagName("canvas");
 var userInput = null;
 var localData = myLocalStorage.get();
-var directionsButton = document.createElement("button");
+var directionsButtonEl = document.createElement("button");
 //VARS-CONSTS-LETS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Init() function to get local data from all leagues from onload.js
+init();
+//Search button Event Listener ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var getUserInput = function (e) {
   e.preventDefault();
-  userInput = userInputForm.value;
+  userInput = userInputEl.value;
   console.log("userInput:  " + userInput);
-  userValidation(userInput);
+  validateUser(userInput);
 };
 
-submitBtn.addEventListener("click", getUserInput);
+submitBtlEl.addEventListener("click", getUserInput);
 
-//Event Lis ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Search button Event Listener ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//FETCH-JQUERY ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-var activeTeam = function (teamId) {
+//FETCH-JQUERY Team Info ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var fetchActiveTeamData = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
     url: `https://api.football-data.org/v2/teams/${teamId}`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
-    // do something with the response, e.g. isolate the id of a linked resource
+    
     console.log(response);
     console.log(response.venue);
     console.log(response.name);
-    stadiumName.textContent = "STADIUM:                  " + response.venue;
-    teamName.textContent = "TEAM:                  " + response.name;
-    founded.textContent = "FOUNDED:                  " + response.founded;
-    nation.textContent = "NATION:                  " + response.area.name;
-    leagueName.textContent =
+    stadiumNameEl.textContent = "STADIUM:                  " + response.venue;
+    teamNameEl.textContent = "TEAM:                  " + response.name;
+    foundedEl.textContent = "FOUNDED:                  " + response.foundedEl;
+    nationEl.textContent = "NATION:                  " + response.area.name;
+    leagueNameEl.textContent =
       "LEAGUE:                  " + response.activeCompetitions[0].name;
-    shortName.textContent =
+    shortNameEl.textContent =
       "ALSO KNOWN AS:                  " + response.shortName;
 
-    teamCrest.setAttribute("src", response.crestUrl);
+    teamCrestEl.setAttribute("src", response.crestUrl);
   });
 };
+//FETCH-JQUERY Team Info ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // MAP API fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc";
 
-// Team address data fetch request
-var getAddress = function (teamId) {
+
+var fetchTeamAddress = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
     url: `https://api.football-data.org/v2/teams/${teamId}`,
@@ -75,14 +77,14 @@ var getAddress = function (teamId) {
   }).done(function (response) {
     console.log("STADIUM ADDRESS:", response.address);
 
-    // Change string to be added to Map API call
+    
     var teamAddress = response.address;
     teamAddress.toString();
     var webTeamAddress = teamAddress.replaceAll(" ", "+");
 
     console.log(webTeamAddress);
 
-    // API call using stadium address for map coordinates
+    
     $.ajax({
       url: `https://geocode.search.hereapi.com/v1/geocode?q=${webTeamAddress}&apiKey=${myMapAPI}`,
       dataType: "json",
@@ -101,31 +103,26 @@ var getAddress = function (teamId) {
       var teamLat = response.items[0].position.lat;
       var teamLong = response.items[0].position.lng;
       mapRender(teamLat, teamLong);
-
-      // Display map on page
-      console.log(
-        "------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- "
-      );
+ 
     });
   });
 };
 // MAP API fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SCORES Fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-var matchHistory = function (teamId) {
+var fetchMatchHistory = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
     url: `https://api.football-data.org/v2/teams/${teamId}/matches/`,
     dataType: "json",
     type: "GET",
   }).done(function (response) {
-    // Use teamID to get match info
+    
     console.log(
       "LAST MATCHES.....................LAST MATCHES.............",
       response
     );
 
-    //Loop through match list to get data as desired before render to page
     for (var i = 0; i < response.matches.length; i++) {
 
       if (response.matches[i].status == "FINISHED") {
@@ -134,7 +131,7 @@ var matchHistory = function (teamId) {
         var awayScore = response.matches[i].score.fullTime.awayTeam;
         var awayTeamName = response.matches[i].awayTeam.name;
         var comp = response.matches[i].competition.name;
-        playedGames.push(
+        playedGamesArr.push(
           homeTeamName +
             " " +
             homeScore +
@@ -149,31 +146,30 @@ var matchHistory = function (teamId) {
         console.log("GAMES NOT PLAYED YET");
       }
     }
-    console.log("Played Games ------------------", playedGames);
-    //Create empty array to hold desired data
-    displayLastFive = [];
-    //Loop through past games to only render last 5 played
-    for (var i = playedGames.length; i >= playedGames.length - 5; i--) {
-      console.log(playedGames[i]);
-      displayLastFive.push(playedGames[i]);
+    console.log("Played Games ------------------", playedGamesArr);
+  
+    getLastFiveScoresArr = [];
+    
+    for (var i = playedGamesArr.length; i >= playedGamesArr.length - 5; i--) {
+      console.log(playedGamesArr[i]);
+      getLastFiveScoresArr.push(playedGamesArr[i]);
     }
     renderLastFive();
 
   });
 };
 
-//Dynamically create elements for score list
-var pastGamesList = document.getElementById("pastGamesList");
-var listChild = pastGamesList.getElementsByTagName("li")[0];
-//Function to render last 5 scores to page
-var renderLastFive = function () {
-  $("#pastGamesList").empty();
 
-  // Create appends for Last 5 played games array
-  for (var i = 1; i < displayLastFive.length; i++) {
+var pastGamesList = document.getElementById("past-Games-List");
+var listChild = pastGamesList.getElementsByTagName("li")[0];
+
+var renderLastFive = function () {
+  $("#past-Games-List").empty();
+
+  for (var i = 1; i < getLastFiveScoresArr.length; i++) {
     var gamesListItem = document.createElement("li");
 
-    gamesListItem.innerHTML = displayLastFive[i];
+    gamesListItem.innerHTML = getLastFiveScoresArr[i];
     pastGamesList.appendChild(gamesListItem);
     gamesListItem.setAttribute(
       "class",
@@ -184,22 +180,22 @@ var renderLastFive = function () {
 
 // PLAYER LIST render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var renderPlayers = function (squadList) {
-  $("#squadListDisplay").empty();
+  $("#squadDisplayEl").empty();
   for (var i = 0; i < squadList.length; i++) {
     console.log(squadList[i]);
-    //Dynamically create elements to display player list
+   
     var playerListItem = document.createElement("li");
     var nameLine = document.createElement("p");
     var nationalityLine = document.createElement("p");
     var positionLine = document.createElement("p");
-    //Get data and set to display as desired
+  
     nameLine.innerHTML = "Name: " + squadList[i].name;
     nationalityLine.innerHTML = "Home Country: " + squadList[i].nationality;
     positionLine.innerHTML = "Position: " + squadList[i].position;
-    //Append list to page
+  
     playerListItem.append(nameLine, nationalityLine, positionLine);
-    squadListDisplay.appendChild(playerListItem);
-    //Tailwind styling
+    squadDisplayEl.appendChild(playerListItem);
+ 
     playerListItem.setAttribute(
       "class",
       "player-Card text-xl bg-gray-800 text-black rounded-lg m-2 p-2 flex-shrink"
@@ -208,8 +204,8 @@ var renderPlayers = function (squadList) {
 };
 
 
-////this function gets the players and stores the key data we need in the "squadlist" array for rendering later
-var getPlayers = function (teamId) {
+// PLAYER LIST render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var fetchTeamPlayers = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
     url: `https://api.football-data.org/v2/teams/${teamId}`,
@@ -239,29 +235,29 @@ var getPlayers = function (teamId) {
 //Function to remove elements ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function removeElementsByTag(tagName) {
-  mapDisplay.innerHTML = "";
-  const elements = document.getElementsByTagName(tagName);
+  mapDisplayEl.innerHTML = "";
+  var elements = document.getElementsByTagName(tagName);
   while (elements.length > 0) {
     elements[0].parentNode.removeChild(elements[0]);
   }
 }
 //Function to remove elements ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var canvasTag = document.getElementsByTagName("canvas");
+
 
 //MAP render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var mapRender = function (teamLat, teamLong) {
-  //first thing here is to remove the canvas
+ 
   removeElementsByTag("canvas");
 
-  //Declare new map element
+ 
   var platform = new H.service.Platform({
     apikey: myMapAPI,
   });
-  // Obtain the default map types from the platform object:
+ 
   var defaultLayers = platform.createDefaultLayers();
 
-  // Instantiate (and display) a map object:
+ 
   var map = new H.Map(
     document.getElementById("mapContainer"),
     defaultLayers.vector.normal.map,
@@ -295,25 +291,25 @@ var mapRender = function (teamLat, teamLong) {
     'keyTimes="0;0.4;1" calcMode="spline" ' +
     'repeatCount="indefinite"/></ellipse></svg>';
 
-  // Create an icon object, an object with geographic coordinates and a marker:
+  
   var icon = new H.map.DomIcon(animatedSvg),
     coords = { lat: teamLat, lng: teamLong },
     marker = new H.map.DomMarker(coords, { icon: icon });
 
-  // Set map center and zoom, add the marker to the map:
+ 
   map.setCenter(coords);
   map.setZoom(14);
   map.addObject(marker);
 
-  //Add Get Directions button to map
-  directionsButton.innerHTML = "Get Directions";
-  directionsButton.setAttribute(
+ 
+  directionsButtonEl.innerHTML = "Get Directions";
+  directionsButtonEl.setAttribute(
     "class",
     "directionButton bg-white text-yellow-600  font-medium hover:bg-gray-300 p-2 rounded-bl-2xl rounded-br-2xl "
   );
-  mapDisplay.append(directionsButton);
-    //Add get directions function to map using google maps
-  directionsButton.onclick = function () {
+  mapDisplayEl.append(directionsButtonEl);
+ 
+  directionsButtonEl.onclick = function () {
     window.open(
       `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
     );
@@ -331,29 +327,28 @@ var myLocalStorage = {
     localStorage.setItem("leagueData", JSON.stringify(data));
   },
 };
-//Check data is being pulled from LocalStorage / onload.js
-console.log("THIS LOCAL DATA WAS LOADED ON SCRIPT.js", localData);
-var userValidation = function (userText) {
+
+var validateUser = function (userText) {
   
   var userInputLower = userText.toLocaleLowerCase();
   //Loop to check over local data
   for (var i = 0; i < localData.length; i++) {
-    var teamName = localData[i].name.toLocaleLowerCase();
+    var teamNameEl = localData[i].name.toLocaleLowerCase();
     console.log(
       "Name:  " +
         localData[i].name.toLocaleLowerCase() +
         "  teamID:  " +
         localData[i].id
     );
-    //Check to match ID and then get team info using ID
-    if (teamName.includes(userInputLower)) {
+    
+    if (teamNameEl.includes(userInputLower)) {
       console.log("---------------------------id was the same");
       var teamId = localData[i].id;
-      console.log(teamId + " " + teamName);
-      matchHistory(teamId);
-      activeTeam(teamId);
-      getAddress(teamId);
-      getPlayers(teamId);
+      console.log(teamId + " " + teamNameEl);
+      fetchMatchHistory(teamId);
+      fetchActiveTeamData(teamId);
+      fetchTeamAddress(teamId);
+      fetchTeamPlayers(teamId);
       getDirections(teamId);
     } else console.log("id was not the same");
   }

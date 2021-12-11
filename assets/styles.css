@@ -3,7 +3,7 @@
   color: aliceblue;
 }
 /*NAV CONTAINER*/
-.largeDivContainer {
+.large-Div-Container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,11 +20,11 @@ input:focus {
   outline: none;
 }
 
-#userInput {
+#user-Input {
   position: relative;
 }
 
-.submitBtn {
+.submit-Btn {
   min-height: 60px;
   border-top-left-radius: 32px;
   border-bottom-left-radius: 32px;
@@ -32,7 +32,7 @@ input:focus {
   text-align: right;
 }
 /*MAP DISPLAY*/
-.mapDisplay {
+.map-Display {
   height: auto;
   min-width: 500px;
   min-height: 300px;
@@ -44,23 +44,23 @@ canvas {
 }
 
 /*PLAYER LIST*/
-#squadListDisplay {
+#squad-List-Display {
   max-height: 300px;
   min-width: 500px;
 }
 
 /*CUSTOM PLAYER LIST SCROLLBAR STYLES*/
-#squadListDisplay::-webkit-scrollbar {
+#squad-List-Display::-webkit-scrollbar {
   width: 20px;
 }
 
 /* Track */
-#squadListDisplay::-webkit-scrollbar-track {
+#squad-List-Display::-webkit-scrollbar-track {
   border-radius: 10px;
 }
 
 /* Handle */
-#squadListDisplay::-webkit-scrollbar-thumb {
+#squad-List-Display::-webkit-scrollbar-thumb {
   background-color: rgb(202 138 4);
   border-radius: 10px;
 }
@@ -72,27 +72,18 @@ canvas {
   background: #8c8;
 }
 
-.squadListDisplay {
+.squad-List-Display {
   max-height: 400px;
   overflow: scroll;
 }
 
 /*TEAM INFO*/
-.teamTextContainer p {
+.team-text-Container p {
   margin-top: 8px;
 }
 
 /*RECENT SCORES*/
-.pastGamesJS {
-  min-width: 700px;
-}
-
-.pastGamesJS {
-  background-color: rgb(31 41 55);
-  max-width: 200px;
-}
-
-.recentScores {
+.recent-Scores {
   border-radius: 16px;
   padding: 8px;
 }
@@ -101,32 +92,32 @@ canvas {
 
 /*DESKTOP*/
 @media only screen and (max-width: 1381px) {
-  .topRowContainer {
+  .top-Row-Container {
     display: flex;
   }
-  .mapDisplay {
+  .map-Display {
     min-width: 94vw;
     justify-content: center;
   }
 }
 /*LAPTOP*/
 @media only screen and (max-width: 1176px) {
-  .navContainer {
+  .nav-Container {
     flex-direction: column-reverse;
     padding: 24px;
   }
 }
 @media only screen and (max-width: 620px) {
-  .recentScores li {
+  .recent-Scores li {
     font-size: 12px;
   }
-  .recentScores {
+  .recent-Scores {
     padding: 0px;
   }
   input {
     min-width: 280px;
   }
-  .mapDisplay {
+  .map-Display {
     min-width: 90vw;
   }
 }
@@ -143,21 +134,21 @@ canvas {
 }
 /*TABLET*/
 @media only screen and (max-width: 620px) {
-  .teamInfoContainer {
+  .team-Info-Container {
     flex-direction: column;
     justify-content: center;
   }
-  .teamCrestContainer {
+  .team-Crest-Container {
     justify-content: center;
   }
-  .teamTextContainer p {
+  .team-text-Container p {
     font-size: 10px;
   }
   .teamCrest img {
     flex-shrink: 1;
     max-width: 100px;
   }
-  #squadListDisplay {
+  #squad-List-Display {
     max-height: 600px;
     min-width: 20px;
     max-width: 280px;
@@ -165,18 +156,18 @@ canvas {
 }
 /*MOBILE*/
 @media only screen and (max-width: 440px) {
-  .navContainer {
+  .nav-Container {
     align-items: center;
   }
-  .recentTitle {
+  .recent-Game-Title {
     font-size: 8px;
   }
-  .topRowContainer {
+  .top-Row-Container {
     max-width: 100vw;
     font-size: 15px;
   }
 
-  .largeDivContainer {
+  .large-Div-Container {
     max-width: 200px;
   }
   input {
@@ -188,49 +179,49 @@ canvas {
     margin-left: 0;
   }
 
-  .teamTextContainer {
+  .team-text-Container {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
   }
 
-  .teamTextContainer p {
+  .team-text-Container p {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     font-size: 20px;
   }
 
-  .teamInfoContainer {
+  .team-Info-Container {
     justify-content: center;
     padding: 5px;
   }
-  .squadListDisplay {
+  .squad-List-Display {
     font-size: 10px;
     max-height: 300px;
   }
-  .recentScores li {
+  .recent-Scores li {
     font-size: 8px;
   }
   .player-Card {
     font-size: 12px;
   }
 
-  #playerList {
+  #player-List {
     max-height: 300px;
   }
-  #squadListDisplay {
+  #squad-List-Display {
     max-height: 600px;
     max-width: 180px;
   }
-  .largeDivContainer {
+  .large-Div-Container {
     max-width: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
-  .formContainer {
+  .form-Container {
     font-size: 4px;
   }
   .pastGamesJS {
