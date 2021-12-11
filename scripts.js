@@ -1,9 +1,8 @@
 //VARS-CONSTS-LETS///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// var gamesList = document.createElement("ul");
 var apiKey = "148ea564e1a248f5a8bb2001c2cb5650";
 var myGoogleAPI = "AIzaSyAd_1DIyVxvCXV7xLWOBeLPS1Na3GK1aJ0";
 var teamId = null;
-var playedGames = []; //think we should push to an array and cut off the last 5 and just display that info
+var playedGames = []; 
 var displayLastFive = [];
 var stadiumName = document.querySelector(".stadiumName");
 var teamName = document.querySelector(".teamName");
@@ -27,6 +26,7 @@ var directionsButton = document.createElement("button");
 
 var getUserInput = function (e) {
   e.preventDefault();
+  localStorage.clear();
   userInput = userInputForm.value;
   console.log("userInput:  " + userInput);
   userValidation(userInput);
@@ -58,13 +58,12 @@ var activeTeam = function (teamId) {
       "ALSO KNOWN AS:                  " + response.shortName;
 
     teamCrest.setAttribute("src", response.crestUrl);
-    //crest url works but the apis selection is poor, night worth selecting white background to lessen the contrast
   });
 };
 
-// VB 1&2/12/2021
-// MAP API fetch - looking at HERE API Geocoding to get co-ordinates for map
-// HERE API key
+
+// MAP API fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var myMapAPI = "GfV_5iSYTmVscV8gV9aBKUMNPyhvn6XNRYUhKui3CQc";
 
 // Team address data fetch request
@@ -104,13 +103,16 @@ var getAddress = function (teamId) {
       var teamLong = response.items[0].position.lng;
       mapRender(teamLat, teamLong);
 
-      // rendering are easier to reset if they're set up as functions, if they're set as just a constant criteria thats
-      // what causes the writing of items on top of eachother like multiple maps, you have to reset the content before each render
       // Display map on page
-      console.log("------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- ")
+      console.log(
+        "------------------xxxxxxxxxxxxxxxx MAP IS RENDERED xxxxxxxxxxxxxxxx---------------- "
+      );
     });
   });
 };
+// MAP API fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// SCORES Fetch ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var matchHistory = function (teamId) {
   $.ajax({
     headers: { "X-Auth-Token": "148ea564e1a248f5a8bb2001c2cb5650" },
@@ -118,16 +120,16 @@ var matchHistory = function (teamId) {
     dataType: "json",
     type: "GET",
   }).done(function (response) {
-    // do something with the response, e.g. isolate the id of a linked resource
+    // Use teamID to get match info
     console.log(
       "LAST MATCHES.....................LAST MATCHES.............",
       response
     );
+
+    //Loop through match list to get data as desired before render to page
     for (var i = 0; i < response.matches.length; i++) {
+
       if (response.matches[i].status == "FINISHED") {
-        // console.log(i)
-        ///THIS IS THE LOG THAT SHOWS ALL THE GAMES THAT HAVE BEEN PLAYED THIS SEASON
-        // JUST NEED TO GET THEM RENDERED ON TO THE INDEX
         var homeTeamName = response.matches[i].homeTeam.name;
         var homeScore = response.matches[i].score.fullTime.homeTeam;
         var awayScore = response.matches[i].score.fullTime.awayTeam;
@@ -144,41 +146,30 @@ var matchHistory = function (teamId) {
             " " +
             comp
         );
-        // console.log(homeTeamName);
       } else {
         console.log("GAMES NOT PLAYED YET");
       }
     }
     console.log("Played Games ------------------", playedGames);
+    //Create empty array to hold desired data
     displayLastFive = [];
+    //Loop through past games to only render last 5 played
     for (var i = playedGames.length; i >= playedGames.length - 5; i--) {
       console.log(playedGames[i]);
       displayLastFive.push(playedGames[i]);
     }
-    testFunc();
     renderLastFive();
 
-    //this rendering needs to be triggered upon the search this way we can took a reset of the content/innerHTML init aswell/
-    // render it as a function and took it in the function thats on submit
   });
-  // console.log("Played Games ------------------", reversePlayed);
 };
 
-// userValidation()
-///TODO:
-//-- Finish this search function DONE
-//-- go over Git Branches
-//-- Setup User input
-//-- go over wire frame
-//----
-
-// match history fetch
-
+//Dynamically create elements for score list
 var pastGamesList = document.getElementById("pastGamesList");
 var listChild = pastGamesList.getElementsByTagName("li")[0];
+//Function to render last 5 scores to page
 var renderLastFive = function () {
   $("#pastGamesList").empty();
-  // need to reset the innerHtml of the ul but cant figure it out yet - DONE!
+
   // Create appends for Last 5 played games array
   for (var i = 1; i < displayLastFive.length; i++) {
     var gamesListItem = document.createElement("li");
@@ -191,25 +182,25 @@ var renderLastFive = function () {
     );
   }
 };
-//Eh-
 
+// PLAYER LIST render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var renderPlayers = function (squadList) {
   $("#squadListDisplay").empty();
   for (var i = 0; i < squadList.length; i++) {
     console.log(squadList[i]);
-
+    //Dynamically create elements to display player list
     var playerListItem = document.createElement("li");
     var nameLine = document.createElement("p");
     var nationalityLine = document.createElement("p");
     var positionLine = document.createElement("p");
-
+    //Get data and set to display as desired
     nameLine.innerHTML = "Name: " + squadList[i].name;
-    nationalityLine.innerHTML = "Nationality: " + squadList[i].nationality;
+    nationalityLine.innerHTML = "Home Country: " + squadList[i].nationality;
     positionLine.innerHTML = "Position: " + squadList[i].position;
-
+    //Append list to page
     playerListItem.append(nameLine, nationalityLine, positionLine);
     squadListDisplay.appendChild(playerListItem);
-    // Not essential just annoying - can't add border to list item? Tailwind syntax is border-COLOR-NUMBER
+    //Tailwind styling
     playerListItem.setAttribute(
       "class",
       "player-Card text-xl bg-gray-800 text-black rounded-lg m-2 p-2 flex-shrink"
@@ -217,19 +208,6 @@ var renderPlayers = function (squadList) {
   }
 };
 
-function removeElementsByTag(tagName) {
-  mapDisplay.innerHTML = "";
-  const elements = document.getElementsByTagName(tagName);
-  while (elements.length > 0) {
-    elements[0].parentNode.removeChild(elements[0]);
-  }
-}
-
-var testFunc = function () {
-  console.log(
-    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTESTING"
-  );
-};
 
 ////this function gets the players and stores the key data we need in the "squadlist" array for rendering later
 var getPlayers = function (teamId) {
@@ -255,14 +233,29 @@ var getPlayers = function (teamId) {
     renderPlayers(squadList);
   });
 };
+// PLAYER LIST render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//Function to remove elements ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function removeElementsByTag(tagName) {
+  mapDisplay.innerHTML = "";
+  const elements = document.getElementsByTagName(tagName);
+  while (elements.length > 0) {
+    elements[0].parentNode.removeChild(elements[0]);
+  }
+}
+//Function to remove elements ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var canvasTag = document.getElementsByTagName("canvas");
-//map render
 
+//MAP render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var mapRender = function (teamLat, teamLong) {
   //first thing here is to remove the canvas
   removeElementsByTag("canvas");
 
+  //Declare new map element
   var platform = new H.service.Platform({
     apikey: myMapAPI,
   });
@@ -278,8 +271,6 @@ var mapRender = function (teamLat, teamLong) {
       center: { lat: teamLat, lng: teamLong },
     }
   );
-  // Create a map object:
-
   // Define a variable holding SVG mark-up that defines an animated icon image:
   var animatedSvg =
     '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" ' +
@@ -315,23 +306,23 @@ var mapRender = function (teamLat, teamLong) {
   map.setZoom(14);
   map.addObject(marker);
 
-  //Add get directions function to map using google maps
-  // var mapBox = document.getElementById("mapContainer");
-  mapDisplay.append(directionsButton);
-
+  //Add Get Directions button to map
   directionsButton.innerHTML = "Get Directions";
   directionsButton.setAttribute(
     "class",
     "directionButton bg-white text-yellow-600  font-medium hover:bg-gray-300 p-2 rounded-bl-2xl rounded-br-2xl "
   );
-
+  mapDisplay.append(directionsButton);
+    //Add get directions function to map using google maps
   directionsButton.onclick = function () {
     window.open(
       `https://www.google.com/maps/dir//${teamLat},${teamLong}/@${teamLat},${teamLong},17z`
     );
   };
 };
+//MAP render ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Local Storage function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var myLocalStorage = {
   get: function () {
     var leagueDataString = localStorage.getItem("leagueData");
@@ -341,14 +332,12 @@ var myLocalStorage = {
     localStorage.setItem("leagueData", JSON.stringify(data));
   },
 };
-
+//Check data is being pulled from LocalStorage / onload.js
 console.log("THIS LOCAL DATA WAS LOADED ON SCRIPT.js", localData);
 var userValidation = function (userText) {
-  //manually setting ID for design ease-should be removed in final build vvvvvvvvvvvvvvvv
-  //var userInput = "Manchester United";
-  //Coment this in and out to turn off the search function ^^^^^^^^^^^
+  
   var userInputLower = userText.toLocaleLowerCase();
-
+  //Loop to check over local data
   for (var i = 0; i < localData.length; i++) {
     var teamName = localData[i].name.toLocaleLowerCase();
     console.log(
@@ -357,6 +346,7 @@ var userValidation = function (userText) {
         "  teamID:  " +
         localData[i].id
     );
+    //Check to match ID and then get team info using ID
     if (teamName.includes(userInputLower)) {
       console.log("---------------------------id was the same");
       var teamId = localData[i].id;
@@ -370,13 +360,9 @@ var userValidation = function (userText) {
   }
 };
 
+//Local Storage function ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//on change size event we should be re rendering the map
-// const widthOutput = document.querySelector("#width");
-// console.log(widthOutput);
+//Event listener to resize map when screen size is changed - temp workaround
+window.addEventListener("resize", getUserInput);
 
-var testFunc = () => {
-console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-}
-
-window.addEventListener('resize', getUserInput)
+// EH & VB 2021
