@@ -3,7 +3,7 @@
 ## https://github.com/HarkyDev/FindMyFootballApp
 
 
-<img src="Docs/demo.GIF> 
+<img src="Docs/demo.GIF"> 
 
 ## LANGUAGES
 JavaScript - CSS - HTML
